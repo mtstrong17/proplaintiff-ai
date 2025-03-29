@@ -34,6 +34,17 @@ export const appRouter = router({
             email: 'john.doe@example.com',
         }
     }),
+    getTeams: publicProcedure.query(async () => {
+      console.log('getTeams')
+        return [
+            {
+                id: 1,
+                name: 'Team 1',
+                logo: '/logoipsum-364.svg',
+                plan: 'Pro',
+            },
+        ]
+    }),
   });
   
 export type AppRouter = typeof appRouter;
