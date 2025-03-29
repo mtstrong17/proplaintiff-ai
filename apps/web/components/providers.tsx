@@ -1,18 +1,9 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { ThemeProvider as NextThemesProvider } from "next-themes"
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import * as React from 'react';
 // Since QueryClientProvider relies on useContext under the hood, we have to put 'use client' on top
-import {
-  defaultShouldDehydrateQuery,
-  isServer,
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query'
-import { AppRouter } from "@workspace/api"
-import { createTRPCClient, httpBatchLink } from "@trpc/client"
-import superjson from "superjson"
-import { TRPCReactProvider } from "@/trpc/client"
+import { TRPCReactProvider } from '@/trpc/client';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -27,5 +18,5 @@ export function Providers({ children }: { children: React.ReactNode }) {
         {children}
       </NextThemesProvider>
     </TRPCReactProvider>
-  )
+  );
 }

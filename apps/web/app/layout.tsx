@@ -1,36 +1,34 @@
-import { Geist, Geist_Mono } from "next/font/google"
+import { Geist, Geist_Mono } from 'next/font/google';
 
-import "@workspace/ui/globals.css"
-import { Providers } from "@/components/providers"
-import { SidebarProvider } from "@workspace/ui/components/sidebar"
-import AppSidebar from "@/components/AppSidebar"
+import AppSidebar from '@/components/AppSidebar';
+import { Providers } from '@/components/providers';
+import { SidebarProvider } from '@workspace/ui/components/sidebar';
+import '@workspace/ui/globals.css';
 const fontSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-})
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
 
 const fontMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-})
+  subsets: ['latin'],
+  variable: '--font-mono',
+});
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}
-      >
+      <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}>
         <Providers>
           <SidebarProvider>
-           <AppSidebar />
+            <AppSidebar />
             {children}
           </SidebarProvider>
         </Providers>
       </body>
     </html>
-  )
+  );
 }

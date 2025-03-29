@@ -1,39 +1,22 @@
-import * as React from "react"
-import { ChevronsUpDown, Plus } from "lucide-react"
+import * as React from 'react';
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@workspace/ui/components/dropdown-menu"
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@workspace/ui/components/sidebar"
-import { dehydrate, HydrationBoundary, QueryClient, useQuery } from "@tanstack/react-query"
-import Image from "next/image"
-import _TeamSwitcher from "./_TeamSwitcher"
-import { getQueryClient, trpc } from "@/trpc/server"
+import { getQueryClient, trpc } from '@/trpc/server';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import _TeamSwitcher from './_TeamSwitcher';
 export interface Team {
-  name: string
-  logo: React.ElementType
-  plan: string
+  name: string;
+  logo: React.ElementType;
+  plan: string;
 }
 
 export default async function TeamSwitcher() {
-  const queryClient = getQueryClient()
+  const queryClient = getQueryClient();
 
-  await queryClient.prefetchQuery(trpc.getTeams.queryOptions())
+  await queryClient.prefetchQuery(trpc.getTeams.queryOptions());
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <_TeamSwitcher />
     </HydrationBoundary>
-  )
+  );
 }
