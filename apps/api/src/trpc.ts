@@ -34,11 +34,17 @@ export const appRouter = router({
   getTeams: publicProcedure.query(async () => {
     console.log('getTeams');
     return [
-      {
-        id: 1,
-        name: 'Team 1',
-        logo: '/logoipsum-364.svg',
+        {
+          id: 1,
+          name: 'ACME Inc.',
+          logo: '/acme.png',
         plan: 'Pro',
+      },
+      {
+        id: 2,
+        name: 'ACME2 Inc.',
+        logo: '/acme.png',
+        plan: 'Essential',
       },
     ];
   }),
