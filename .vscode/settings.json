@@ -14,5 +14,6 @@
         {
             "mode": "auto"
         }
-    ]
+    ],
+    "eslint.format.enable": true
 }

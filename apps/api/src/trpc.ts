@@ -1,5 +1,6 @@
 import { initTRPC } from '@trpc/server';
 import superjson from 'superjson';
+import { z } from 'zod';
 
 export const createContext = async () => {
   return {
@@ -24,30 +25,14 @@ export const router = t.router;
 export const publicProcedure = t.procedure;
 
 export const appRouter = router({
-  currentUser: publicProcedure.query(async () => {
-    return {
-      id: 1,
-      name: 'Mike Doe',
-      email: 'john.doe@example.com',
-    };
-  }),
-  getTeams: publicProcedure.query(async () => {
-    console.log('getTeams');
-    return [
-        {
-          id: 1,
-          name: 'ACME Inc.',
-          logo: '/acme.png',
-        plan: 'Pro',
-      },
-      {
-        id: 2,
-        name: 'ACME2 Inc.',
-        logo: '/acme.png',
-        plan: 'Essential',
-      },
-    ];
-  }),
+  processDocument: publicProcedure
+    .input(
+      z.object({
+        documentIds: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ input }) => {
+    }),
 });
 
 export type AppRouter = typeof appRouter;
