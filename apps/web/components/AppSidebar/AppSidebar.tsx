@@ -23,9 +23,6 @@ export default function AppSidebar() {
           <SidebarGroupLabel>Case</SidebarGroupLabel>
           <CaseSearch />
         </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Kubernetes</SidebarGroupLabel>
-        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );
