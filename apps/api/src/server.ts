@@ -1,9 +1,17 @@
+import cors from '@fastify/cors';
 import { fastifyTRPCPlugin, FastifyTRPCPluginOptions } from '@trpc/server/adapters/fastify';
 import fastify from 'fastify';
-import { appRouter, createContext, type AppRouter } from './trpc.js';
+import { appRouter, type AppRouter } from './routers/_app.js';
+import { createContext } from './trpc.js';
 
 const server = fastify({
   maxParamLength: 5000,
+});
+
+await server.register(cors, {
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 });
 
 server.register(fastifyTRPCPlugin, {

@@ -5,17 +5,15 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupLabel,
-  SidebarHeader,
-  useSidebar,
+  SidebarHeader
 } from '@workspace/ui/components/sidebar';
-import TeamSwitcher from './TeamSwitcher';
+import OrganizationSwitcher from './OrganizationSwitcher';
 
 export default function AppSidebar() {
-  const { isMobile } = useSidebar();
   return (
     <Sidebar>
       <SidebarHeader>
-        <TeamSwitcher />
+        <OrganizationSwitcher />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>

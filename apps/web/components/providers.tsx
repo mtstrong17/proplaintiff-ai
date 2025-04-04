@@ -10,7 +10,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <TRPCReactProvider>
       <NextThemesProvider
         attribute="class"
-        defaultTheme="system"
+        defaultTheme="light"
         enableSystem
         disableTransitionOnChange
         enableColorScheme

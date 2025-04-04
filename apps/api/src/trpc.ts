@@ -1,6 +1,5 @@
 import { initTRPC } from '@trpc/server';
 import superjson from 'superjson';
-import { z } from 'zod';
 
 export const createContext = async () => {
   return {
@@ -23,18 +22,3 @@ const t = initTRPC.context<Context>().create({
  */
 export const router = t.router;
 export const publicProcedure = t.procedure;
-
-export const appRouter = router({
-  getTeams: publicProcedure.query(async ({ ctx }) => {
-    return [];
-  }),
-  processDocument: publicProcedure
-    .input(
-      z.object({
-        documentIds: z.array(z.string()),
-      })
-    )
-    .mutation(async ({ input }) => {}),
-});
-
-export type AppRouter = typeof appRouter;

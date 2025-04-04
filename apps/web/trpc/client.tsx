@@ -30,7 +30,7 @@ function getUrl() {
     return 'http://localhost:8080';
   })();
   console.log('base', base);
-  return `http://localhost:8080`;
+  return `http://localhost:8080/trpc`;
 }
 export function TRPCReactProvider(
   props: Readonly<{

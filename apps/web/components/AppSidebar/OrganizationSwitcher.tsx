@@ -23,17 +23,17 @@ import {
 import Image from 'next/image';
 import { useEffect } from 'react';
 
-function TeamSwitcher() {
+function OrganizationSwitcher() {
   const trpc = useTRPC();
-  const { data: teams } = useQuery(trpc.getTeams.queryOptions());
+  const { data: organizations } = useQuery(trpc.organizations.list.queryOptions());
   const { isMobile } = useSidebar();
-  const [activeTeam, setActiveTeam] = React.useState(teams?.[0] || null);
+  const [activeOrganization, setActiveOrganization] = React.useState(organizations?.[0] || null);
 
   useEffect(() => {
-    setActiveTeam(activeTeam || teams?.[0] || null);
-  }, [teams]);
+    setActiveOrganization(activeOrganization || organizations?.[0] || null);
+  }, [organizations]);
 
-  if (!activeTeam) {
+  if (!activeOrganization) {
     return null;
   }
 
@@ -47,11 +47,11 @@ function TeamSwitcher() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <Image src={activeTeam.logo} alt={activeTeam.name} width={32} height={32} />
+                <Image src={activeOrganization.logo} alt={activeOrganization.name} width={32} height={32} />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{activeTeam.name}</span>
-                <span className="truncate text-xs">{activeTeam.plan}</span>
+                <span className="truncate font-semibold">{activeOrganization.name}</span>
+                <span className="truncate text-xs">{activeOrganization.plan}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -65,23 +65,23 @@ function TeamSwitcher() {
             side={isMobile ? 'bottom' : 'right'}
             sideOffset={4}
           >
-            <DropdownMenuLabel className="text-xs text-muted-foreground">Teams</DropdownMenuLabel>
-            {teams!.map((team, index) => (
+            <DropdownMenuLabel className="text-xs text-muted-foreground">Organizations</DropdownMenuLabel>
+            {organizations!.map((org, index) => (
               <DropdownMenuItem
-                key={team.name}
-                onClick={() => setActiveTeam(team)}
+                key={org.name}
+                onClick={() => setActiveOrganization(org)}
                 className="gap-2 p-2"
               >
                 <div className="flex size-6 items-center justify-center rounded-sm border">
                   <Image
-                    src={team.logo}
-                    alt={team.name}
+                    src={org.logo}
+                    alt={org.name}
                     className="size-4 shrink-0"
                     width={32}
                     height={32}
                   />
                 </div>
-                {team.name}
+                {org.name}
                 <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
               </DropdownMenuItem>
             ))}
@@ -90,7 +90,7 @@ function TeamSwitcher() {
               <div className="flex size-6 items-center justify-center rounded-md border bg-background">
                 <Plus className="size-4" />
               </div>
-              <div className="font-medium text-muted-foreground">Add team</div>
+              <div className="font-medium text-muted-foreground">Add organization</div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -99,4 +99,4 @@ function TeamSwitcher() {
   );
 }
 
-export default TeamSwitcher;
+export default OrganizationSwitcher; 
