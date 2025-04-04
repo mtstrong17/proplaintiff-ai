@@ -1,0 +1,155 @@
+---
+name: Frontend Architecture Standards
+version: "1.0"
+description: "Standards and patterns for the Next.js frontend application"
+globs:
+  - "apps/web/**/*"
+  - "packages/ui/**/*"
+triggers:
+  - file_creation
+  - file_modification
+---
+
+# Frontend Architecture Standards
+
+## Overview
+
+This document outlines the architecture, patterns, and standards for the Next.js frontend application. The frontend is built using Next.js 15+ with App Router, TypeScript, and follows a monorepo structure with shared UI components.
+
+## Project Structure
+
+### Core Directories
+
+```
+apps/web/
+├── app/             # Next.js App Router pages and layouts
+├── components/      # App-specific components
+├── lib/            # Utility functions and shared logic
+├── hooks/          # Custom React hooks
+├── trpc/           # tRPC client configuration
+└── public/         # Static assets
+
+packages/ui/        # Shared UI component library
+```
+
+## Technology Stack
+
+- **Framework**: Next.js 15+ with App Router
+- **Language**: TypeScript
+- **State Management**: React Query + tRPC
+- **Styling**: Tailwind CSS
+- **UI Components**: Custom components + shadcn/ui
+- **Package Manager**: pnpm with workspace support
+
+## Key Dependencies
+
+- React 19+
+- TanStack Query for data fetching
+- tRPC for type-safe API communication
+- next-themes for dark mode support
+- Geist font family for typography
+
+## Architectural Patterns
+
+### 1. Layout Structure
+
+- Use the root layout (`app/layout.tsx`) for global providers and configuration
+- Implement nested layouts for specific sections (e.g., dashboard, auth)
+- Maintain consistent layout structure across routes
+
+### 2. Component Organization
+
+- Place shared components in `packages/ui`
+- Keep app-specific components in `apps/web/components`
+- Use atomic design principles for component hierarchy
+
+### 3. Data Fetching
+
+- Use tRPC for type-safe API communication
+- Implement React Query for client-side state management
+- Handle data prefetching in layout or page components
+
+### 4. Styling Guidelines
+
+- Use Tailwind CSS for styling
+- Follow the design system defined in `packages/ui`
+- Maintain consistent spacing and typography
+
+## Best Practices
+
+1. **Type Safety**
+   - Use TypeScript for all components and functions
+   - Maintain strict type checking
+   - Leverage tRPC for end-to-end type safety
+
+2. **Performance**
+   - Implement proper code splitting
+   - Use React Suspense for loading states
+   - Optimize images using Next.js Image component
+
+3. **State Management**
+   - Use React Query for server state
+   - Implement local state with React hooks
+   - Avoid unnecessary global state
+
+4. **Code Organization**
+   - Follow feature-based folder structure
+   - Keep components small and focused
+   - Use consistent naming conventions
+
+## Component Development
+
+### 1. Component Structure
+
+```tsx
+// Example component structure
+import { type FC } from 'react'
+import { cn } from '@/lib/utils'
+
+interface ComponentProps {
+  // Props definition
+}
+
+export const Component: FC<ComponentProps> = ({ ...props }) => {
+  return (
+    // JSX
+  )
+}
+```
+
+### 2. Hooks Pattern
+
+```tsx
+// Example custom hook
+export function useCustomHook() {
+  // Hook implementation
+  return {
+    // Hook return values
+  }
+}
+```
+
+## Testing Standards
+
+1. Implement unit tests for utility functions
+2. Use React Testing Library for component tests
+3. Follow testing best practices for hooks and components
+
+## Documentation
+
+1. Include JSDoc comments for complex functions
+2. Document component props using TypeScript interfaces
+3. Maintain README files for major features
+
+## Deployment
+
+- Use Vercel for deployments
+- Implement proper environment variable management
+- Follow the staging -> production deployment flow
+
+## Notes
+
+- Keep dependencies up to date
+- Follow semantic versioning
+- Maintain consistent code formatting using Prettier
+- Use ESLint for code quality enforcement 

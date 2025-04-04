@@ -1,0 +1,147 @@
+---
+name: API Stack Standards
+version: "1.0"
+description: "Standards and patterns for the API application stack"
+globs:
+  - "apps/api/**/*"
+triggers:
+  - file_open
+  - file_edit
+---
+
+# API Stack Standards and Patterns
+
+## Overview
+
+This rule defines the standards, patterns, and technologies used in the API application. The API is built using a modern TypeScript stack with a focus on type safety, scalability, and developer experience.
+
+## Core Technologies
+
+### Runtime & Language
+- Node.js with TypeScript
+- ESM modules
+- Type-safe development with strict TypeScript configuration
+
+### API Framework & Communication
+- Fastify as the HTTP server framework
+- tRPC for type-safe API endpoints
+- CORS enabled for cross-origin requests
+
+### Database & ORM
+- PostgreSQL as the primary database
+- Drizzle ORM for type-safe database operations
+- Database migrations using drizzle-kit
+
+### AI & Machine Learning Integration
+- AWS Bedrock for AI model integration
+- AWS Textract for document processing
+- LangChain for AI/LLM orchestration
+- OpenAI integration capabilities
+
+### Storage
+- AWS S3 for object storage
+- Structured file organization for uploads
+
+## Project Structure
+
+```
+apps/api/
+├── src/           # Source code
+├── drizzle/       # Database migrations
+└── dist/          # Compiled output
+```
+
+## Development Standards
+
+### Code Organization
+1. Use feature-based organization within the `src` directory
+2. Implement clear separation of concerns
+3. Keep business logic separate from route handlers
+4. Use dependency injection patterns where appropriate
+
+### Type Safety
+1. Maintain strict TypeScript configuration
+2. Use Zod for runtime type validation
+3. Leverage tRPC for end-to-end type safety
+4. Define explicit types for all database models
+
+### Database Practices
+1. Use Drizzle migrations for schema changes
+2. Define explicit relationships between tables
+3. Use appropriate indexes for performance
+4. Follow naming conventions for tables and columns
+
+### API Endpoints
+1. Group related endpoints using tRPC routers
+2. Implement proper error handling
+3. Use input validation with Zod
+4. Document API procedures and types
+
+### AI Integration
+1. Use environment variables for API keys
+2. Implement retry mechanisms for AI operations
+3. Handle rate limiting appropriately
+4. Log AI operations for monitoring
+
+## Environment Configuration
+
+Required environment variables:
+```env
+DATABASE_URL=postgresql://...
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_REGION=...
+```
+
+## Commands
+
+Common development commands:
+```bash
+# Development
+pnpm dev           # Start development server
+pnpm build         # Build for production
+
+# Database
+pnpm db:generate   # Generate migrations
+pnpm db:push      # Apply migrations
+pnpm db:studio    # Open Drizzle Studio
+
+# Code Quality
+pnpm lint         # Run ESLint
+pnpm check-types  # Type check
+```
+
+## Best Practices
+
+1. Follow the principle of least privilege for AWS services
+2. Implement proper error handling and logging
+3. Use transactions for related database operations
+4. Cache expensive operations where appropriate
+5. Follow REST/RPC best practices for API design
+6. Document complex business logic
+7. Write unit tests for critical paths
+
+## Security Considerations
+
+1. Never commit sensitive credentials
+2. Use environment variables for configuration
+3. Implement proper request validation
+4. Follow security best practices for file uploads
+5. Implement rate limiting where necessary
+6. Validate and sanitize user input
+
+## Performance Guidelines
+
+1. Use connection pooling for database
+2. Implement appropriate caching strategies
+3. Optimize database queries
+4. Monitor API response times
+5. Use appropriate batch processing for heavy operations
+
+## Monitoring and Logging
+
+1. Implement structured logging
+2. Monitor API health metrics
+3. Track performance metrics
+4. Log error boundaries
+5. Monitor AI operation costs 

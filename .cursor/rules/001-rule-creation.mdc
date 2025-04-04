@@ -1,0 +1,97 @@
+---
+description: "Standards for creating new Cursor rules using MDC format"
+globs: 
+alwaysApply: false
+---
+
+# Rule Creation Standards
+
+## File Structure
+
+When creating new Cursor rules, always follow this structure:
+
+1. Place rules in the `.cursor/rules/` directory
+2. Use `.mdc` file extension
+3. Follow the numbered prefix convention:
+   - Core Rules: 001-099
+   - Integration Rules: 100-199
+   - Pattern/Role Rules: 200-299
+
+## Required Front Matter
+
+Every rule file must include this YAML front matter:
+
+```yaml
+---
+name: [Rule Name]
+version: "1.0"
+description: "[Brief description of the rule's purpose]"
+globs: [Files/patterns this rule applies to]
+triggers: [When this rule should be activated]
+---
+```
+
+## Rule Content Structure
+
+### 1. Title Section
+Start with a clear H1 title describing the rule's purpose
+
+### 2. Overview Section
+Provide a brief explanation of what the rule does and why it exists
+
+### 3. Main Content
+- Use clear hierarchical structure with H2, H3 headers
+- Include specific examples where applicable
+- Use code blocks with language specification
+- Keep instructions clear and actionable
+
+### 4. Best Practices
+- Write rules in clear, natural language
+- Be specific and avoid ambiguity
+- Include examples when possible
+- Use markdown formatting for clarity
+
+## Example Rule Structure
+
+```markdown
+---
+name: Example Rule
+version: "1.0"
+description: "Description of the rule"
+globs:
+  - "relevant/file/patterns/**/*"
+triggers:
+  - relevant_trigger
+---
+
+# Rule Title
+
+## Overview
+Brief explanation of the rule's purpose
+
+## Specific Guidelines
+1. First guideline
+2. Second guideline
+
+### Examples
+```code
+example code here
+```
+
+## Notes
+Additional important information
+```
+
+## Validation
+
+Before saving a new rule, ensure:
+1. The file is properly named with numerical prefix
+2. Front matter is complete and valid
+3. Content is well-structured and formatted
+4. Examples are included where helpful
+5. The rule is placed in the correct directory
+
+## Saving Rule
+When saving the rule file write it to a normal md file first then rename it to use the mdc extention as saving directly to mdc seems to have a bug
+
+Remember that rules should be clear, specific, and actionable to ensure consistent application across the project. 

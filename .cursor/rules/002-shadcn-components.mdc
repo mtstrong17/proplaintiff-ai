@@ -1,0 +1,72 @@
+---
+name: ShadCN Component Integration
+version: "1.0"
+description: "Standards for integrating shadcn components in the turborepo frontend"
+globs:
+  - "apps/**/pages/**/*"
+  - "apps/**/components/**/*"
+triggers:
+  - component_creation
+  - page_creation
+---
+
+# ShadCN Component Integration Standards
+
+## Overview
+When creating new pages or components in the frontend, prioritize using shadcn components to maintain consistency and leverage pre-built accessible components. This rule defines the process for integrating shadcn components into the turborepo structure.
+
+## Component Installation Process
+
+### 1. Installation Command
+Always install shadcn components using the following command structure from the root of the turborepo:
+```bash
+pnpm dlx shadcn@latest add <component-name>
+```
+
+### 2. Component Location
+- Components will be installed in the `components/ui` directory of your application
+- Ensure the component is installed in the correct workspace package
+
+### 3. Supported Components
+Common components to consider:
+- Button
+- Card
+- Dialog
+- DropdownMenu
+- Form
+- Input
+- Select
+- Tabs
+- Toast
+- Toggle
+
+## Best Practices
+
+1. **Workspace Awareness**
+   - Always run the installation command from the root of the turborepo
+   - Ensure the correct workspace is targeted for component installation
+
+2. **Component Reuse**
+   - Before creating custom components, check if a shadcn component exists
+   - Customize existing components through theming rather than creating new ones
+
+3. **Styling**
+   - Use the built-in theming system
+   - Maintain consistency with the existing design system
+
+## Examples
+
+### Installing a Button Component
+```bash
+pnpm dlx shadcn@latest add button
+```
+
+### Installing Multiple Components
+```bash
+pnpm dlx shadcn@latest add button card input
+```
+
+## Notes
+- Always check the shadcn documentation for the latest component options
+- Consider component dependencies when installing new components
+- Keep track of installed components to avoid duplication 
