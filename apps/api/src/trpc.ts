@@ -25,6 +25,9 @@ export const router = t.router;
 export const publicProcedure = t.procedure;
 
 export const appRouter = router({
+  getTeams: publicProcedure.query(async ({ ctx }) => {
+    return [];
+  }),
   processDocument: publicProcedure
     .input(
       z.object({

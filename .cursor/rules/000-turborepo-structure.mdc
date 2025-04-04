@@ -1,0 +1,91 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Turborepo Project Structure
+
+## Overview
+
+This monorepo is built using Turborepo and pnpm workspaces. It follows a standardized structure to organize applications, shared packages, and configurations.
+
+## Directory Structure
+
+### Root Level
+
+```
+├── apps/               # Application projects
+├── packages/           # Shared packages and configurations
+├── .cursor/           # Cursor IDE configuration and rules
+├── .vscode/           # VSCode configuration
+├── turbo.json         # Turborepo configuration
+├── pnpm-workspace.yaml # Workspace configuration
+└── package.json       # Root package configuration
+```
+
+### Applications (`apps/`)
+
+The `apps/` directory contains standalone applications:
+
+```
+apps/
+├── api/              # Backend API application
+└── web/              # Frontend web application
+```
+
+### Shared Packages (`packages/`)
+
+The `packages/` directory contains shared configurations and components:
+
+```
+packages/
+├── ui/               # Shared UI components
+├── eslint-config/    # Shared ESLint configurations
+└── typescript-config/ # Shared TypeScript configurations
+```
+
+## Package Management
+
+- This project uses `pnpm` as the package manager
+- Workspaces are configured in `pnpm-workspace.yaml`
+- Dependencies should be installed at the most specific level needed
+
+## Build and Development
+
+### Workspace Scripts
+
+Common scripts available in the root `package.json`:
+- `build`: Build all applications and packages
+- `dev`: Run all applications in development mode
+- `lint`: Run linting across all projects
+- `test`: Run tests across all projects
+
+### Dependencies
+
+1. All packages should specify exact versions
+2. Shared dependencies should be hoisted to the root
+3. Package-specific dependencies should be installed in their respective directories
+
+## Best Practices
+
+1. **New Applications**
+   - Should be added under the `apps/` directory
+   - Must include their own `package.json`
+   - Should extend shared configurations when possible
+
+2. **Shared Packages**
+   - Should be added under the `packages/` directory
+   - Must be properly scoped (e.g., `@repo/package-name`)
+   - Should include comprehensive documentation
+
+3. **Configuration**
+   - Use shared configurations from `packages/` when possible
+   - Extend shared configs rather than duplicating them
+   - Keep root-level configuration minimal
+
+## Notes
+
+- Always run commands from the root directory
+- Use the workspace protocol (`workspace:*`) for local package dependencies
+- Follow the established directory structure when adding new applications or packages

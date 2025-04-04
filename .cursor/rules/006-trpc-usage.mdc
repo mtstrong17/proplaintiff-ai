@@ -1,0 +1,119 @@
+---
+description: Standards and patterns for using TRPC v11 with TanStack Query in the frontend application, including Server Components support
+globs: 
+alwaysApply: false
+---
+
+# TRPC Usage with TanStack Query and Server Components
+
+## Table of Contents
+
+1. [Project Setup](mdc:#project-setup)
+2. [Client Components Usage](mdc:#client-components-usage)
+3. [Server Components Usage](mdc:#server-components-usage)
+4. [Best Practices](mdc:#best-practices)
+
+## Project Setup
+
+### Required Dependencies
+
+```bash
+pnpm add @trpc/server @trpc/client @trpc/tanstack-react-query @tanstack/react-query
+```
+
+## Client Components Usage
+
+### Basic Query Pattern
+```tsx
+'use client';
+
+import { useTRPC } from '@/trpc/client';
+import { useQuery } from '@tanstack/react-query';
+
+export function MyComponent() {
+  const trpc = useTRPC();
+  
+  const { data, isPending } = useQuery(
+    trpc.yourProcedure.queryOptions({
+      // Your input here
+    })
+  );
+}
+```
+
+### Mutation Pattern
+```tsx
+'use client';
+
+import { useTRPC } from '@/trpc/client';
+import { useMutation } from '@tanstack/react-query';
+
+export function MyComponent() {
+  const trpc = useTRPC();
+  
+  const { mutate, isPending } = useMutation(
+    trpc.yourProcedure.mutationOptions({
+      onSuccess: (data) => {
+        // Handle success
+      },
+    })
+  );
+}
+```
+
+## Server Components Usage
+
+### Server Component Pattern
+```tsx
+// app/page.tsx
+import { getQueryClient, trpc } from '@/trpc/server';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+
+export default async function Page() {
+  const queryClient = getQueryClient();
+  
+  // Fetch and use data server-side
+  const data = await queryClient.prefetchQuery(
+    trpc.yourProcedure.queryOptions({})
+  );
+  const dehydratedState = dehydrate(queryClient);
+  return (
+    <HydrationBoundary state={dehydratedState}>
+      <ClientComponent />
+    </HydrationBoundary>
+  );
+}
+```
+
+## Best Practices
+
+1. **Type Safety**
+   - Always import router types using `import type`
+   - Let TypeScript infer return types from procedures
+   - Never use type assertions with TRPC calls
+
+2. **Query Client Management**
+   - Use singleton pattern in browser
+   - Create new instances per request on server
+   - Configure appropriate stale times for SSR
+
+3. **Server Components**
+   - Use `prefetchQuery` for server-side data fetching
+   - Always wrap client components with `HydrateClient`
+   - Leverage React Suspense boundaries appropriately
+
+   ```
+3. **Data Prefetching**
+   ```tsx
+   // Prefetch in parallel
+   await Promise.all([
+     queryClient.prefetchQuery(trpc.data1.queryOptions({})),
+     queryClient.prefetchQuery(trpc.data2.queryOptions({})),
+   ]);
+   ```
+
+Remember:
+- Server Components solve many data-fetching problems natively
+- Use TRPC for type-safe API calls where needed
+- Consider whether you need TRPC for your specific use case
+- Leverage React Suspense and streaming where appropriate 
