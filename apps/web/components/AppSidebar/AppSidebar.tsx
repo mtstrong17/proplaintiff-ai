@@ -8,6 +8,7 @@ import {
   SidebarHeader
 } from '@workspace/ui/components/sidebar';
 import { CaseSearch } from './CaseSearch';
+import { MainNavigation } from './MainNavigation';
 import OrganizationSwitcher from './OrganizationSwitcher';
 
 export default function AppSidebar() {
@@ -22,6 +23,10 @@ export default function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Case</SidebarGroupLabel>
           <CaseSearch />
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Main Navigation</SidebarGroupLabel>
+          <MainNavigation />
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>

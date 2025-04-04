@@ -1,0 +1,104 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# ProPlaintiff AI Core Purpose and Guidelines
+
+## Overview
+
+ProPlaintiff AI serves as an AI-powered paralegal assistant for personal injury law firms. The platform enhances legal workflows by automating document analysis, facilitating data-driven conversations, and streamlining case management processes.
+
+## Core Features and Implementation Guidelines
+
+### 1. Document Analysis System
+- Implement AI-powered document processing for:
+  - Medical records
+  - Police reports
+  - Insurance documents
+  - Witness statements
+- Extract key information including:
+  - Dates and timeline events
+  - Medical diagnoses and treatments
+  - Liability indicators
+  - Insurance coverage details
+
+### 2. Interactive Case Chat
+- Build context-aware chat interface that:
+  - Maintains conversation history
+  - References uploaded documents
+  - Provides citations for responses
+  - Follows legal compliance guidelines
+- Implement role-based access control for different user types
+
+### 3. Demand Letter Generation
+- Create templates following legal standards
+- Include customizable sections for:
+  - Case summary
+  - Liability analysis
+  - Damages calculation
+  - Settlement demands
+- Maintain audit trail of all generated documents
+
+### 4. Event Timeline Management
+- Implement interactive timeline features:
+  - Automatic event extraction from documents
+  - Manual event addition and editing
+  - Visual timeline representation
+  - Export capabilities for legal proceedings
+
+### 5. Data Security and Compliance
+- Enforce strict data handling practices:
+  - End-to-end encryption for sensitive data
+  - HIPAA compliance for medical records
+  - Secure document storage and transmission
+  - Regular security audits
+
+## Technical Implementation Standards
+
+### AI Integration
+- Use latest LLM technologies for:
+  - Document understanding
+  - Natural language processing
+  - Content generation
+- Implement proper prompt engineering for legal context
+- Maintain model versioning and performance tracking
+
+### User Experience
+- Design intuitive interfaces for legal professionals
+- Implement responsive design for various devices
+- Provide clear feedback for AI-assisted operations
+- Include help documentation and tooltips
+
+### Data Management
+- Implement structured storage for:
+  - Case documents
+  - Chat histories
+  - Generated content
+  - User preferences
+- Enable efficient search and retrieval
+- Maintain proper backup procedures
+
+## Best Practices
+
+1. **Legal Accuracy**
+   - Always maintain human oversight for AI-generated content
+   - Include disclaimer for AI-assisted operations
+   - Provide clear indication of AI vs. human input
+
+2. **User Privacy**
+   - Implement strict access controls
+   - Log all system access and changes
+   - Regular privacy impact assessments
+
+3. **Performance**
+   - Optimize for quick document processing
+   - Implement efficient caching strategies
+   - Monitor and optimize API response times
+
+## Notes
+
+- All features should prioritize accuracy over speed
+- Regular updates based on user feedback and legal requirements
+- Maintain comprehensive testing for all AI-assisted features

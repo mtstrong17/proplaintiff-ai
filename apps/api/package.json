@@ -32,6 +32,7 @@
     "@types/cors": "^2.8.17",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.41.0",
     "fastify": "^5.2.2",

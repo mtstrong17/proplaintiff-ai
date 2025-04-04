@@ -1,6 +1,11 @@
 import { z } from 'zod';
 import { publicProcedure, router } from '../../trpc.js';
 
+const caseSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
 export const currentUserRouter = router({
   getOrganizations: publicProcedure
     .output(
@@ -35,4 +40,13 @@ export const currentUserRouter = router({
         },
       ];
     }),
+
+  getCases: publicProcedure.output(z.array(caseSchema)).query(async () => {
+    // Mock data - replace with actual database query
+    return [
+      { id: '1', name: 'Smith vs. Johnson' },
+      { id: '2', name: 'Estate of Brown' },
+      { id: '3', name: 'Davis Corporation Lawsuit' },
+    ];
+  }),
 });

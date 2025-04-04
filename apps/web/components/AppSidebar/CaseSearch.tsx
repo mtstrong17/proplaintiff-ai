@@ -1,19 +1,25 @@
 'use client';
 
-import { useCaseStore } from '@/lib/store/case-store';
+import { useTRPC } from '@/trpc/client';
+import { useQuery } from '@tanstack/react-query';
 import { Briefcase } from 'lucide-react';
+import * as React from 'react';
 import { SidebarPopoverMenu } from './SidebarPopoverMenu';
 
 export function CaseSearch() {
-  const {
-    currentCase,
-    setCurrentCase,
-    casesForCurrentOrg,
-    searchQuery,
-    setSearchQuery,
-    isSearching,
-    setIsSearching
-  } = useCaseStore();
+  const [isSearching, setIsSearching] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [currentCase, setCurrentCase] = React.useState<{ id: string; name: string; } | null>(null);
+  const trpc = useTRPC();
+  
+  const { data: cases = [] } = useQuery(trpc.currentUser.getCases.queryOptions());
+
+  React.useEffect(() => {
+    const firstCase = cases[0];
+    if (firstCase && !currentCase) {
+      setCurrentCase(firstCase);
+    }
+  }, [cases, currentCase]);
 
   const handleSelect = (caseItem: typeof currentCase) => {
     if (caseItem) {
@@ -26,7 +32,7 @@ export function CaseSearch() {
   return (
     <SidebarPopoverMenu
       icon={Briefcase}
-      items={casesForCurrentOrg}
+      items={cases}
       selectedItem={currentCase}
       isOpen={isSearching}
       searchQuery={searchQuery}
