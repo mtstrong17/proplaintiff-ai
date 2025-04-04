@@ -23,8 +23,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const queryClient = getQueryClient();
+  console.log('prefetching cases');
   await Promise.all([
     queryClient.prefetchQuery(trpc.currentUser.getOrganizations.queryOptions()),
+    queryClient.prefetchQuery(trpc.currentUser.getCases.queryOptions()),
   ]);
   return (
     

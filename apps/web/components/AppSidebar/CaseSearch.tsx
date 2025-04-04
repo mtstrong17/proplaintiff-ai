@@ -9,18 +9,18 @@ import { SidebarPopoverMenu } from './SidebarPopoverMenu';
 export function CaseSearch() {
   const [isSearching, setIsSearching] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [currentCase, setCurrentCase] = React.useState<{ id: string; name: string; } | null>(null);
   const trpc = useTRPC();
   
   const { data: cases = [] } = useQuery(trpc.currentUser.getCases.queryOptions());
-
+  
+  const [currentCase, setCurrentCase] = React.useState<{ id: string; name: string; } | null>(cases?.[0] || null);
   React.useEffect(() => {
     const firstCase = cases[0];
     if (firstCase && !currentCase) {
       setCurrentCase(firstCase);
     }
   }, [cases, currentCase]);
-
+  
   const handleSelect = (caseItem: typeof currentCase) => {
     if (caseItem) {
       setCurrentCase(caseItem);

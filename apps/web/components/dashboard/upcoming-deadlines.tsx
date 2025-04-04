@@ -5,7 +5,8 @@ import { ArrowRight, Calendar } from "lucide-react";
 interface Deadline {
   id: number;
   title: string;
-  dueDate: string;
+  start: Date;
+  end: Date;
   caseId: string;
 }
 
@@ -40,7 +41,7 @@ export function UpcomingDeadlines({ deadlines }: UpcomingDeadlinesProps) {
               </div>
               <div className="flex items-center gap-2 text-sm font-medium text-primary">
                 <Calendar className="h-4 w-4" />
-                {deadline.dueDate}
+                {deadline.start.toLocaleDateString()} - {deadline.end.toLocaleDateString()}
               </div>
             </div>
           ))}

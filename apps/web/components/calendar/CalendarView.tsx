@@ -12,9 +12,11 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 const localizer = momentLocalizer(moment);
 
 type CalendarEvent = {
+  id: number;
   title: string;
   start: Date;
   end: Date;
+  caseId: string;
 };
 
 function CustomToolbar({ onNavigate, label, view, onView }: ToolbarProps<CalendarEvent, object>) {
@@ -69,13 +71,21 @@ function CustomToolbar({ onNavigate, label, view, onView }: ToolbarProps<Calenda
         >
           Day
         </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onView('agenda')}
+          className={view === 'agenda' ? 'bg-accent' : ''}
+        >
+          Agenda
+        </Button>
       </div>
     </div>
   );
 }
 
 export function CalendarView() {
-  const [view, setView] = useState<"month" | "week" | "day">("month");
+  const [view, setView] = useState<"month" | "week" | "day" | "agenda">("month");
   const [date, setDate] = useState(new Date());
   const [events, setEvents] = useState<CalendarEvent[]>([]);
 
@@ -84,10 +94,10 @@ export function CalendarView() {
 
   useEffect(() => {
     if (fetchedEvents) {
-      setEvents(fetchedEvents.map((event: { title: string; start: Date; end: Date; }) => ({
-        title: event.title,
-        start: event.start,
-        end: event.end,
+      setEvents(fetchedEvents.map((event) => ({
+        ...event,
+        start: new Date(event.start),
+        end: new Date(event.end),
       })));
     }
   }, [fetchedEvents]);
@@ -106,11 +116,12 @@ export function CalendarView() {
       view={view}
       date={date}
       onNavigate={handleNavigate}
-      onView={(newView) => setView(newView as "month" | "week" | "day")}
-      views={['month', 'week', 'day']}
+      onView={(newView) => setView(newView as "month" | "week" | "day" | "agenda")}
+      views={['month', 'week', 'day', 'agenda']}
       components={{
         toolbar: CustomToolbar,
       }}
+      length={30}
     />
   );
 } 

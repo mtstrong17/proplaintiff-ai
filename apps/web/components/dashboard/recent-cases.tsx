@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/componen
 import { ArrowRight, Clock } from "lucide-react";
 
 interface Case {
-  id: string;
+  id: number;
   client: string;
   type: string;
   status: string;
