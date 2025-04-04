@@ -1,13 +1,7 @@
 ---
-name: ShadCN Component Integration
-version: "1.0"
 description: "Standards for integrating shadcn components in the turborepo frontend"
-globs:
-  - "apps/**/pages/**/*"
-  - "apps/**/components/**/*"
-triggers:
-  - component_creation
-  - page_creation
+globs: 
+alwaysApply: false
 ---
 
 # ShadCN Component Integration Standards
@@ -22,9 +16,10 @@ Always install shadcn components using the following command structure from the 
 ```bash
 pnpm dlx shadcn@latest add <component-name>
 ```
+Always run this command from the `apps/web` directory
 
 ### 2. Component Location
-- Components will be installed in the `components/ui` directory of your application
+- Components will be installed in the `@workspace/ui/components` directory of your application
 - Ensure the component is installed in the correct workspace package
 
 ### 3. Supported Components
