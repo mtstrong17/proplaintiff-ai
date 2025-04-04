@@ -1,0 +1,190 @@
+---
+name: API Procedures Management
+version: "1.0"
+description: "Standards and processes for adding, updating, or removing procedures in the API"
+globs:
+  - "api/src/procedures/**/*"
+  - "api/src/types/procedures.ts"
+triggers:
+  - procedure_change
+  - procedure_create
+  - procedure_delete
+---
+
+# API Procedures Management
+
+## Overview
+This rule defines the standards and processes for managing procedures within the API, ensuring consistency and maintainability when adding, updating, or removing procedures.
+
+## Procedure Structure
+
+### 1. File Organization
+- Place all procedure files in `api/src/procedures/`
+- One procedure per file
+- Use kebab-case for file names (e.g., `create-case.ts`)
+- Group related procedures in subdirectories if needed
+
+### 2. Required Components
+Each procedure must include:
+```typescript
+// Type definition in types/procedures.ts
+export interface ProcedureName {
+  input: {
+    // Input parameters
+  };
+  output: {
+    // Output type
+  };
+}
+
+// Procedure implementation
+export const procedureName = procedure
+  .input(z.object({
+    // Zod validation schema
+  }))
+  .output(z.object({
+    // Output validation schema
+  }))
+  .query/mutation(async ({ ctx, input }) => {
+    // Implementation
+  });
+```
+
+## Adding a New Procedure
+
+1. Type Definition
+   - Add procedure interface to `types/procedures.ts`
+   - Define clear input/output types
+   - Document complex types
+
+2. Implementation
+   - Create new file in procedures directory
+   - Import necessary dependencies
+   - Implement input validation using Zod
+   - Add proper error handling
+   - Include logging for important operations
+
+3. Router Integration
+   - Import procedure in appropriate router
+   - Add meaningful procedure name
+   - Update API documentation if applicable
+
+Example:
+```typescript
+// types/procedures.ts
+export interface GetCaseDetails {
+  input: {
+    caseId: string;
+  };
+  output: {
+    case: Case;
+    relatedDocuments: Document[];
+  };
+}
+
+// procedures/cases/get-case-details.ts
+export const getCaseDetails = procedure
+  .input(z.object({
+    caseId: z.string(),
+  }))
+  .output(z.object({
+    case: caseSchema,
+    relatedDocuments: z.array(documentSchema),
+  }))
+  .query(async ({ ctx, input }) => {
+    const { caseId } = input;
+    
+    // Implementation
+  });
+```
+
+## Updating Existing Procedures
+
+1. Backward Compatibility
+   - Maintain existing type structure if possible
+   - If breaking changes needed, create new version
+   - Deprecate old versions properly
+
+2. Testing
+   - Update affected tests
+   - Add new test cases
+   - Verify error handling
+
+3. Documentation
+   - Update comments and type definitions
+   - Note changes in changelog
+   - Update API documentation
+
+## Removing Procedures
+
+1. Deprecation Process
+   - Mark as deprecated first
+   - Add deprecation notice in docs
+   - Plan migration path for clients
+
+2. Removal Steps
+   - Remove from router
+   - Delete procedure file
+   - Update type definitions
+   - Remove related tests
+   - Update documentation
+
+## Error Handling
+
+1. Standard Error Types
+```typescript
+export type ProcedureError = {
+  code: string;
+  message: string;
+  details?: Record<string, unknown>;
+};
+```
+
+2. Error Codes
+   - Use consistent error codes
+   - Document error scenarios
+   - Include helpful error messages
+
+## Best Practices
+
+1. Security
+   - Always validate input
+   - Check user permissions
+   - Sanitize output data
+
+2. Performance
+   - Optimize database queries
+   - Use appropriate caching
+   - Handle pagination properly
+
+3. Maintainability
+   - Write clear comments
+   - Use meaningful variable names
+   - Follow consistent code style
+
+## Testing Requirements
+
+1. Test Coverage
+   - Unit tests for logic
+   - Integration tests for DB operations
+   - Error handling tests
+
+2. Test Structure
+```typescript
+describe('procedureName', () => {
+  it('should handle valid input correctly', async () => {
+    // Test implementation
+  });
+
+  it('should handle errors appropriately', async () => {
+    // Error test implementation
+  });
+});
+```
+
+## Notes
+- Follow existing patterns in the codebase
+- Consider impact on existing clients
+- Document significant changes
+- Use proper typing and validation
+- Maintain consistent error handling 

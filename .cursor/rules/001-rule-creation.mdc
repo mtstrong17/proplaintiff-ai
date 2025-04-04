@@ -1,7 +1,12 @@
 ---
+name: Rule Creation Standards
+version: "1.0"
 description: "Standards for creating new Cursor rules using MDC format"
-globs: 
-alwaysApply: false
+globs:
+  - ".cursor/rules/**/*.mdc"
+triggers:
+  - rule_creation
+  - rule_update
 ---
 
 # Rule Creation Standards
@@ -90,8 +95,5 @@ Before saving a new rule, ensure:
 3. Content is well-structured and formatted
 4. Examples are included where helpful
 5. The rule is placed in the correct directory
-
-## Saving Rule
-When saving the rule file write it to a normal md file first then rename it to use the mdc extention as saving directly to mdc seems to have a bug
 
 Remember that rules should be clear, specific, and actionable to ensure consistent application across the project. 
