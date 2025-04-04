@@ -25,7 +25,7 @@ import { useEffect } from 'react';
 
 function OrganizationSwitcher() {
   const trpc = useTRPC();
-  const { data: organizations } = useQuery(trpc.organizations.list.queryOptions());
+  const { data: organizations } = useQuery(trpc.currentUser.getOrganizations.queryOptions());
   const { isMobile } = useSidebar();
   const [activeOrganization, setActiveOrganization] = React.useState(organizations?.[0] || null);
 
