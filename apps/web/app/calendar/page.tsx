@@ -1,10 +1,9 @@
+import { AddEventDialog } from "@/components/calendar/AddEventDialog";
 import { CalendarView } from "@/components/calendar/CalendarView";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
-import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@workspace/ui/components/dialog";
-import { Calendar as CalendarIcon, Plus } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { Suspense } from "react";
 
 export default async function CalendarPage() {
@@ -22,22 +21,7 @@ export default async function CalendarPage() {
                 View and manage your upcoming events and deadlines
               </p>
             </div>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="gap-2">
-                  <Plus className="h-4 w-4" />
-                  Add Event
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Add New Event</DialogTitle>
-                </DialogHeader>
-                <p className="text-sm text-muted-foreground">
-                  Event creation functionality coming soon!
-                </p>
-              </DialogContent>
-            </Dialog>
+            <AddEventDialog />
           </div>
 
           <Card className="flex-1">
