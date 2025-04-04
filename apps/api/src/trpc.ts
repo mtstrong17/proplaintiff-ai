@@ -31,8 +31,7 @@ export const appRouter = router({
         documentIds: z.array(z.string()),
       })
     )
-    .mutation(async ({ input }) => {
-    }),
+    .mutation(async ({ input }) => {}),
 });
 
 export type AppRouter = typeof appRouter;

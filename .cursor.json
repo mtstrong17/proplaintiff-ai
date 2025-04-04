@@ -1,0 +1,34 @@
+{
+  "projectType": "monorepo",
+  "framework": "turborepo",
+  "packageManager": "pnpm",
+  "searchPaths": [
+    "apps/web/src",
+    "apps/api/src",
+    "packages/ui/src"
+  ],
+  "priorityPaths": [
+    "apps/web/src/pages",
+    "apps/web/src/components",
+    "apps/api/src/routes",
+    "packages/ui/src/components"
+  ],
+  "excludePatterns": [
+    "**/*.test.*",
+    "**/*.spec.*",
+    "**/node_modules/**",
+    "**/.next/**",
+    "**/dist/**",
+    "**/.turbo/**"
+  ],
+  "fileAssociations": {
+    "*.tsx": "typescript-react",
+    "*.ts": "typescript",
+    "*.css": "css",
+    "*.scss": "scss"
+  },
+  "typescript": {
+    "strict": true,
+    "checkJs": true
+  }
+} 

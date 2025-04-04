@@ -1,0 +1,26 @@
+# Build outputs
+.next/
+dist/
+build/
+
+# Dependencies
+node_modules/
+.turbo/
+
+# Cache and logs
+.cache/
+*.log
+
+# Environment files
+.env*
+!.env.example
+
+# Generated files
+*.generated.*
+.DS_Store
+
+# Package manager files
+pnpm-lock.yaml
+
+# Test coverage
+coverage/ 

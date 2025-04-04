@@ -1,6 +1,13 @@
 'use client';
 
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarHeader, useSidebar } from '@workspace/ui/components/sidebar';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  useSidebar,
+} from '@workspace/ui/components/sidebar';
 import TeamSwitcher from './TeamSwitcher';
 
 export default function AppSidebar() {

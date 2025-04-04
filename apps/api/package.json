@@ -11,7 +11,10 @@
     "build": "tsc",
     "dev": "tsx watch src/server.ts",
     "lint": "eslint --fix",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate:pg",
+    "db:push": "drizzle-kit push:pg",
+    "db:studio": "drizzle-kit studio"
   },
   "keywords": [],
   "author": "",

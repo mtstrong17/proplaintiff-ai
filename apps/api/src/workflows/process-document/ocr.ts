@@ -1,12 +1,12 @@
-import { S3Client } from "@aws-sdk/client-s3";
+import { S3Client } from '@aws-sdk/client-s3';
 import {
   Block,
   GetDocumentAnalysisCommand,
   StartDocumentAnalysisCommand,
-  TextractClient
-} from "@aws-sdk/client-textract";
-import { isValid, parse } from "date-fns";
-import { writeFile } from "fs/promises";
+  TextractClient,
+} from '@aws-sdk/client-textract';
+import { isValid, parse } from 'date-fns';
+import { writeFile } from 'fs/promises';
 
 interface BoundingBox {
   left: number;
@@ -53,46 +53,46 @@ interface TextractResponse {
 
 // Common date formats to try parsing
 const DATE_FORMATS = [
-  "MM/dd/yyyy",
-  "MM-dd-yyyy",
-  "MM.dd.yyyy",
-  "yyyy-MM-dd",
-  "MM/dd/yy",
-  "MM-dd-yy",
-  "MM.dd.yy",
-  "MMMM d, yyyy",
-  "MMMM d yyyy",
-  "MMM d, yyyy",
-  "MMM d yyyy",
-  "d MMMM yyyy",
-  "d MMM yyyy",
+  'MM/dd/yyyy',
+  'MM-dd-yyyy',
+  'MM.dd.yyyy',
+  'yyyy-MM-dd',
+  'MM/dd/yy',
+  'MM-dd-yy',
+  'MM.dd.yy',
+  'MMMM d, yyyy',
+  'MMMM d yyyy',
+  'MMM d, yyyy',
+  'MMM d yyyy',
+  'd MMMM yyyy',
+  'd MMM yyyy',
 ];
 
 function isLineBlock(block: Block): block is Block & { Text: string } {
-  return block.BlockType === "LINE" && typeof block.Text === "string";
+  return block.BlockType === 'LINE' && typeof block.Text === 'string';
 }
 
 function extractDates(
-  text: string, 
-  confidence: number, 
+  text: string,
+  confidence: number,
   citationIndex: number,
   boundingBox?: BoundingBox
 ): DateInfo[] {
   const dates: DateInfo[] = [];
-  
+
   // Split text into words and look for potential date patterns
   const words = text.split(/\s+/);
-  
+
   for (let i = 0; i < words.length; i++) {
     const word = words[i];
     if (!word) {
       continue;
     }
-    
+
     // Try each date format
     for (const format of DATE_FORMATS) {
       const parsedDate = parse(word, format, new Date());
-      
+
       if (isValid(parsedDate)) {
         dates.push({
           date: parsedDate,
@@ -106,7 +106,7 @@ function extractDates(
       }
     }
   }
-  
+
   return dates;
 }
 
@@ -117,31 +117,28 @@ async function pollForCompletion(
   intervalMs: number = 2000
 ): Promise<void> {
   let attempts = 0;
-  
+
   while (attempts < maxAttempts) {
     const command = new GetDocumentAnalysisCommand({
       JobId: jobId,
     });
 
     const response = await textractClient.send(command);
-    
-    if (response.JobStatus === "SUCCEEDED") {
+
+    if (response.JobStatus === 'SUCCEEDED') {
       return;
-    } else if (response.JobStatus === "FAILED") {
-      throw new Error(`Textract job failed: ${response.StatusMessage || "Unknown error"}`);
+    } else if (response.JobStatus === 'FAILED') {
+      throw new Error(`Textract job failed: ${response.StatusMessage || 'Unknown error'}`);
     }
 
     attempts++;
-    await new Promise(resolve => setTimeout(resolve, intervalMs));
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
   }
 
-  throw new Error("Textract job timed out");
+  throw new Error('Textract job timed out');
 }
 
-async function getAllBlocks(
-  textractClient: TextractClient,
-  jobId: string
-): Promise<Block[]> {
+async function getAllBlocks(textractClient: TextractClient, jobId: string): Promise<Block[]> {
   const allBlocks: Block[] = [];
   let nextToken: string | undefined;
 
@@ -152,9 +149,9 @@ async function getAllBlocks(
     });
 
     const response = await textractClient.send(command);
-    
+
     if (!response.Blocks) {
-      throw new Error("No blocks found in the document analysis response");
+      throw new Error('No blocks found in the document analysis response');
     }
 
     allBlocks.push(...response.Blocks);
@@ -167,7 +164,7 @@ async function getAllBlocks(
 export async function performOCR(
   s3Bucket: string,
   s3Key: string,
-  region: string = "us-west-2"
+  region: string = 'us-west-2'
 ): Promise<TextractResponse> {
   const textractClient = new TextractClient({ region });
   const s3Client = new S3Client({ region });
@@ -181,13 +178,13 @@ export async function performOCR(
           Name: s3Key,
         },
       },
-      FeatureTypes: ["FORMS", "LAYOUT", "SIGNATURES", "TABLES"],
+      FeatureTypes: ['FORMS', 'LAYOUT', 'SIGNATURES', 'TABLES'],
     });
 
     const startResponse = await textractClient.send(startCommand);
 
     if (!startResponse.JobId) {
-      throw new Error("No job ID received from Textract");
+      throw new Error('No job ID received from Textract');
     }
 
     // Poll for job completion
@@ -238,8 +235,13 @@ export async function performOCR(
           citations.push(citation);
 
           // Extract dates from the text
-          const dates = extractDates(text, block.Confidence || 0, citations.length - 1, boundingBox);
-          const datesWithPage = dates.map(date => ({
+          const dates = extractDates(
+            text,
+            block.Confidence || 0,
+            citations.length - 1,
+            boundingBox
+          );
+          const datesWithPage = dates.map((date) => ({
             ...date,
             pageNumber,
           }));
@@ -249,35 +251,38 @@ export async function performOCR(
 
       pages.push({
         pageNumber,
-        text: pageText.join("\n"),
+        text: pageText.join('\n'),
         citations,
         dates: pageDates,
       });
     }
 
     // Create distinct dates array with occurrences
-    const distinctDates = pages.flatMap(page => page.dates).reduce<DistinctDate[]>((acc, dateInfo) => {
-      const existingDate = acc.find(d => d.date.getTime() === dateInfo.date.getTime());
-      
-      if (existingDate) {
-        if (!existingDate.occurrences.includes(dateInfo.pageNumber)) {
-          existingDate.occurrences.push(dateInfo.pageNumber);
-        }
-      } else {
-        acc.push({
-          date: dateInfo.date,
-          text: dateInfo.text,
-          confidence: dateInfo.confidence,
-          boundingBox: dateInfo.boundingBox,
-          occurrences: [dateInfo.pageNumber],
-        });
-      }
-      
-      return acc;
-    }, []).sort((a, b) => a.date.getTime() - b.date.getTime());
+    const distinctDates = pages
+      .flatMap((page) => page.dates)
+      .reduce<DistinctDate[]>((acc, dateInfo) => {
+        const existingDate = acc.find((d) => d.date.getTime() === dateInfo.date.getTime());
 
-    return { 
-      pages, 
+        if (existingDate) {
+          if (!existingDate.occurrences.includes(dateInfo.pageNumber)) {
+            existingDate.occurrences.push(dateInfo.pageNumber);
+          }
+        } else {
+          acc.push({
+            date: dateInfo.date,
+            text: dateInfo.text,
+            confidence: dateInfo.confidence,
+            boundingBox: dateInfo.boundingBox,
+            occurrences: [dateInfo.pageNumber],
+          });
+        }
+
+        return acc;
+      }, [])
+      .sort((a, b) => a.date.getTime() - b.date.getTime());
+
+    return {
+      pages,
       totalDates: distinctDates.length,
       distinctDates,
     };
@@ -285,7 +290,7 @@ export async function performOCR(
     if (error instanceof Error) {
       throw new Error(`OCR processing failed: ${error.message}`);
     }
-    throw new Error("OCR processing failed with unknown error");
+    throw new Error('OCR processing failed with unknown error');
   }
 }
 
