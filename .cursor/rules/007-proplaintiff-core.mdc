@@ -1,7 +1,9 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+name: ProPlaintiff Core Purpose
+version: "1.0"
+description: "Core purpose, features, and implementation guidelines for ProPlaintiff AI"
+globs: ["apps/**/*", "packages/**/*"]
+triggers: ["file_creation", "feature_implementation"]
 ---
 
 # ProPlaintiff AI Core Purpose and Guidelines
@@ -101,4 +103,4 @@ ProPlaintiff AI serves as an AI-powered paralegal assistant for personal injury 
 
 - All features should prioritize accuracy over speed
 - Regular updates based on user feedback and legal requirements
-- Maintain comprehensive testing for all AI-assisted features
+- Maintain comprehensive testing for all AI-assisted features 
