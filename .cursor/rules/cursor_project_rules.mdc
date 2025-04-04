@@ -1,0 +1,107 @@
+---
+description: Apply these rules when creating the project
+globs:
+alwaysApply: true
+---
+## Project Overview
+
+*   **Type:** AI-Powered Legal Platform
+*   **Description:** Proplaintiff-AI is an AI-powered platform designed to help legal professionals manage and analyze legal case documents efficiently. It provides features for document processing, OCR, information extraction, case insights, and comprehensive user/organization/subscription management, all while enforcing strict security and compliance with legal regulations.
+*   **Primary Goal:** To streamline legal document processing and case analysis through automated AI insights and secure data management.
+
+## Project Structure
+
+### Framework-Specific Routing
+
+*   **Directory Rules:**
+
+    *   Next.js 14 (App Router): Uses the app/[route]/page.tsx conventions
+    *   Example 1: "Next.js 14 (App Router)" → `app/[route]/page.tsx` conventions
+    *   Example 2: "Next.js (Pages Router)" → `pages/[route].tsx` pattern
+    *   Example 3: "React Router 6" → `src/routes/` with `createBrowserRouter`
+
+### Core Directories
+
+*   **Versioned Structure:**
+
+    *   apps/web: Next.js front-end application utilizing the App Router (app/) directory for nested and structured routing.
+    *   apps/api: Node.js back-end employing Fastify and tRPC for building secure, efficient APIs.
+    *   packages/ui: React-based UI components library built with Radix UI and styled using Tailwind CSS.
+
+### Key Files
+
+*   **Stack-Versioned Patterns:**
+
+    *   app/auth/login/page.tsx: Next.js 14 login page implementing authentication flows with server actions.
+    *   app/case/page.tsx: Next.js 14 route handling case creation and displaying AI-generated legal insights.
+
+## Tech Stack Rules
+
+*   **Version Enforcement:**
+
+    *   next@14: Enforce the App Router structure with nested directories; avoid using legacy methods like getInitialProps.
+    *   node@current: Use Fastify with tRPC in the apps/api directory for type-safe API development and efficient handling.
+
+## PRD Compliance
+
+*   **Non-Negotiable:**
+
+    *   "Strict access controls, data encryption, and compliance with legal regulations must be enforced": All modules must adhere to these security and regulatory requirements.
+
+## App Flow Integration
+
+*   **Stack-Aligned Flow:**
+
+    *   Next.js 14 Auth Flow → `app/auth/login/page.tsx` leverages server actions for user authentication and organization association.
+    *   Document Upload Flow → `app/document/upload/page.tsx` integrates with AWS S3 for uploads and AWS Textract for OCR processing.
+    *   Case Management Flow → `app/case/page.tsx` captures case metadata and displays AI-driven insights from AWS Bedrock and Langchain.
+
+## Best Practices
+
+*   Next.js with TypeScript
+
+    *   Use Next.js 14 App Router with nested folders to organize routes and pages effectively.
+    *   Leverage React Query and tRPC for efficient data fetching and caching.
+    *   Enforce strict type checking to maintain robust code quality.
+
+*   Node.js with Fastify
+
+    *   Optimize middleware usage and implement rigorous error handling.
+    *   Adhere to security best practices by validating inputs and limiting request rates.
+    *   Use dotenv for managing environment-specific configurations securely.
+
+*   AWS Services (S3, Textract, Bedrock)
+
+    *   Utilize the AWS SDK securely and manage API keys and credentials carefully.
+    *   Implement retry and resiliency patterns to handle service rate limits and network issues.
+    *   Optimize API interactions to balance performance with cost-effectiveness.
+
+*   UI Development with Tailwind CSS and Radix UI
+
+    *   Maintain component consistency using utilities like cva, clsx, and tailwind-merge.
+    *   Follow accessibility standards to ensure a user-friendly and inclusive interface.
+    *   Leverage Radix UI primitive components for building robust, interactive UIs.
+
+## Rules
+
+*   Derive folder/file patterns **directly** from tech stack document versions.
+*   If Next.js 14 App Router: Enforce the `app/` directory with nested route folders.
+*   If Pages Router: Use `pages/*.tsx` flat structure.
+*   Mirror this logic for React Router, SvelteKit, etc.
+*   Never mix version patterns (e.g., no `pages/` in App Router projects).
+
+## Rules Metrics
+
+Before starting the project development, create a metrics file in the root of the project called
+
+`cursor_metrics.md`.
+
+### Instructions:
+
+*   Each time a cursor rule is used as context, update `cursor_metrics.md`.
+
+*   Use the following format for `cursor_metrics.md:` Rules Metrics (h1) Usage (h2) The number of times rules is used as context
+
+    *   rule-name.mdc: 5
+    *   another-rule.mdc: 2
+    *   ...other rules
