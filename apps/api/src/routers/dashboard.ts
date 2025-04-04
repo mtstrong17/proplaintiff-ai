@@ -1,5 +1,6 @@
+import dayjs from 'dayjs';
+import { z } from 'zod';
 import { publicProcedure, router } from '../trpc.js';
-
 // Sample data - In a real app, this would come from your database
 const SAMPLE_CASES = [
   { id: 1, client: 'John Doe', type: 'Auto Accident', status: 'Active', lastUpdated: '2024-04-04' },
@@ -44,37 +45,46 @@ export const dashboardRouter = router({
     };
   }),
 
-  getUpcomingDeadlines: publicProcedure.query(() => {
-    // Generate dates that are always in the future relative to the current date
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
+  getUpcomingDeadlines: publicProcedure
+    .output(
+      z.array(
+        z.object({
+          id: z.number(),
+          title: z.string(),
+          start: z.date(),
+          end: z.date(),
+          caseId: z.string(),
+        })
+      )
+    )
+    .query(() => {
+      const today = dayjs().startOf('day');
+      const tomorrow = today.add(1, 'day');
+      const dayAfterTomorrow = today.add(2, 'day');
+      const threeDaysFromNow = today.add(3, 'day');
 
-    const dayAfterTomorrow = new Date(today);
-    dayAfterTomorrow.setDate(today.getDate() + 2);
-
-    const threeDaysFromNow = new Date(today);
-    threeDaysFromNow.setDate(today.getDate() + 3);
-
-    return [
-      {
-        id: 1,
-        title: 'File Motion Response',
-        dueDate: tomorrow.toISOString().split('T')[0],
-        caseId: 'CASE-001',
-      },
-      {
-        id: 2,
-        title: 'Settlement Conference',
-        dueDate: dayAfterTomorrow.toISOString().split('T')[0],
-        caseId: 'CASE-002',
-      },
-      {
-        id: 3,
-        title: 'Document Review',
-        dueDate: threeDaysFromNow.toISOString().split('T')[0],
-        caseId: 'CASE-003',
-      },
-    ];
-  }),
+      return [
+        {
+          id: 1,
+          title: 'File Motion Response',
+          start: tomorrow.toDate(),
+          end: tomorrow.add(3, 'hours').toDate(),
+          caseId: 'CASE-001',
+        },
+        {
+          id: 2,
+          title: 'Settlement Conference',
+          start: dayAfterTomorrow.toDate(),
+          end: dayAfterTomorrow.add(3, 'hours').toDate(),
+          caseId: 'CASE-002',
+        },
+        {
+          id: 3,
+          title: 'Document Review',
+          start: threeDaysFromNow.toDate(),
+          end: threeDaysFromNow.add(3, 'hours').toDate(),
+          caseId: 'CASE-003',
+        },
+      ];
+    }),
 });
