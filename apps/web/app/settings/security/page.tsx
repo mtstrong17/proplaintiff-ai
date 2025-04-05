@@ -5,7 +5,7 @@ import { Button } from "@workspace/ui/components/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@workspace/ui/components/form"
 import { Input } from "@workspace/ui/components/input"
-import { Switch } from "@workspace/ui/components/switch"
+import { Check } from "lucide-react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
@@ -134,35 +134,47 @@ export default function SecurityPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between space-x-4">
+          <div className="flex items-center justify-between space-x-4 rounded-lg border p-4">
             <div className="space-y-1">
-              <h4 className="text-sm font-medium">Authenticator App</h4>
+              <div className="flex items-center space-x-2">
+                <h4 className="text-sm font-medium">Authenticator App</h4>
+                <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-600 flex items-center gap-1">
+                  <Check className="h-3 w-3" />
+                  <span>Enabled</span>
+                </span>
+              </div>
               <p className="text-sm text-muted-foreground">
                 Use an authenticator app to generate one-time codes.
               </p>
             </div>
-            <Switch
-              checked={false}
-              onCheckedChange={() => {
-                // TODO: Implement 2FA toggle
-                console.log("Toggle 2FA")
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                // TODO: Implement 2FA configuration
+                console.log("Configure Authenticator App")
               }}
-            />
+            >
+              Configure
+            </Button>
           </div>
-          <div className="flex items-center justify-between space-x-4">
+          <div className="flex items-center justify-between space-x-4 rounded-lg border p-4">
             <div className="space-y-1">
               <h4 className="text-sm font-medium">SMS Authentication</h4>
               <p className="text-sm text-muted-foreground">
                 Receive one-time codes via SMS.
               </p>
             </div>
-            <Switch
-              checked={false}
-              onCheckedChange={() => {
-                // TODO: Implement SMS 2FA toggle
-                console.log("Toggle SMS 2FA")
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                // TODO: Implement SMS 2FA configuration
+                console.log("Configure SMS Authentication")
               }}
-            />
+            >
+              Configure
+            </Button>
           </div>
         </CardContent>
       </Card>
