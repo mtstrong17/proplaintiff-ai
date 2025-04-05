@@ -197,6 +197,7 @@ export default function SecurityPage() {
                 <Button
                   variant="outline"
                   size="sm"
+                  className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-600"
                   onClick={() => {
                     // TODO: Implement session termination
                     console.log(`Terminate session for ${session.device}`)
