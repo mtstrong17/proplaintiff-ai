@@ -66,7 +66,7 @@ export default function CasesPage() {
               Manage and track all your legal cases in one place
             </p>
           </div>
-          <Button className="gap-2 sm:self-start">
+          <Button className="gap-2 sm:self-start" onClick={() => router.push('/cases/new')}>
             <FileText className="h-4 w-4" />
             New Case
           </Button>
