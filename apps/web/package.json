@@ -24,6 +24,7 @@
     "@trpc/tanstack-react-query": "^11.0.1",
     "@workspace/api": "workspace:*",
     "@workspace/ui": "workspace:*",
+    "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "fs-extra": "^11.3.0",
     "lucide-react": "^0.475.0",
