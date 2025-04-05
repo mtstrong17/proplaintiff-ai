@@ -1,5 +1,6 @@
 'use client';
 
+import { useStore } from '@/lib/store';
 import { useTRPC } from '@/trpc/client';
 import { useQuery } from '@tanstack/react-query';
 import { Briefcase } from 'lucide-react';
@@ -10,20 +11,24 @@ export function CaseSearch() {
   const [isSearching, setIsSearching] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
   const trpc = useTRPC();
+  const { selectedCaseId, setSelectedCaseId } = useStore();
   
   const { data: cases = [] } = useQuery(trpc.currentUser.getCases.queryOptions());
   
-  const [currentCase, setCurrentCase] = React.useState<{ id: string; name: string; } | null>(cases?.[0] || null);
+  const currentCase = React.useMemo(() => {
+    return cases.find(c => c.id === selectedCaseId) || cases[0] || null;
+  }, [cases, selectedCaseId]);
+
   React.useEffect(() => {
     const firstCase = cases[0];
-    if (firstCase && !currentCase) {
-      setCurrentCase(firstCase);
+    if (firstCase && !selectedCaseId) {
+      setSelectedCaseId(firstCase.id);
     }
-  }, [cases, currentCase]);
+  }, [cases, selectedCaseId, setSelectedCaseId]);
   
   const handleSelect = (caseItem: typeof currentCase) => {
     if (caseItem) {
-      setCurrentCase(caseItem);
+      setSelectedCaseId(caseItem.id);
       setIsSearching(false);
       setSearchQuery('');
     }

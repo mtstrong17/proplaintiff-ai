@@ -1,7 +1,9 @@
 'use client';
 
+import { Lead, useStore } from "@/lib/store";
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
 import {
-  Cell,
   Column,
   ColumnDef,
   ColumnFiltersState,
@@ -37,18 +39,6 @@ import {
 } from "@workspace/ui/components/table";
 import { ArrowUpDown, MoreHorizontal, UserPlus } from "lucide-react";
 import { useState } from "react";
-
-// This would typically come from your API
-type Lead = {
-  id: string
-  name: string
-  email: string
-  phone: string
-  incidentType: string
-  incidentDate: string
-  status: "new" | "contacted" | "qualified" | "converted" | "lost"
-  createdAt: string
-}
 
 const columns: ColumnDef<Lead>[] = [
   {
@@ -101,6 +91,7 @@ const columns: ColumnDef<Lead>[] = [
     id: "actions",
     cell: ({ row }: { row: Row<Lead> }) => {
       const lead = row.original
+      const { setSelectedLeadId } = useStore()
 
       return (
         <DropdownMenu>
@@ -118,7 +109,9 @@ const columns: ColumnDef<Lead>[] = [
               Copy email
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View details</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setSelectedLeadId(lead.id)}>
+              View details
+            </DropdownMenuItem>
             <DropdownMenuItem>Update status</DropdownMenuItem>
             <DropdownMenuItem>Convert to case</DropdownMenuItem>
           </DropdownMenuContent>
@@ -145,39 +138,23 @@ function getStatusColor(status: string) {
   }
 }
 
-// This would typically come from your API
-const data: Lead[] = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "(555) 123-4567",
-    incidentType: "Car Accident",
-    incidentDate: "2024-03-15",
-    status: "new",
-    createdAt: "2024-04-01",
-  },
-  {
-    id: "2",
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    phone: "(555) 987-6543",
-    incidentType: "Slip and Fall",
-    incidentDate: "2024-03-20",
-    status: "contacted",
-    createdAt: "2024-04-02",
-  },
-  // Add more sample data as needed
-]
-
 export function LeadsDataTable() {
+  const trpc = useTRPC();
+  const { leadFilters, setLeadFilters } = useStore();
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
+  const { data: leads } = useQuery(
+    trpc.leads.getAll.queryOptions({
+      status: leadFilters.status || undefined,
+      search: leadFilters.search || undefined,
+    })
+  );
+
   const table = useReactTable({
-    data,
+    data: leads ?? [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -200,9 +177,9 @@ export function LeadsDataTable() {
       <div className="flex items-center justify-between">
         <Input
           placeholder="Filter by name..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          value={leadFilters.search}
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            setLeadFilters({ ...leadFilters, search: event.target.value })
           }
           className="max-w-sm"
         />
@@ -238,7 +215,7 @@ export function LeadsDataTable() {
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell: Cell<Lead, unknown>) => (
+                  {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -261,30 +238,6 @@ export function LeadsDataTable() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
     </div>
-  )
+  );
 } 

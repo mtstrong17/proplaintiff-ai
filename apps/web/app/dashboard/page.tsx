@@ -17,6 +17,7 @@ import {
 
 export default function DashboardPage() {
   const trpc = useTRPC();
+  
   const { data: metrics } = useQuery(trpc.dashboard.getMetrics.queryOptions());
   const { data: recentCases } = useQuery(trpc.dashboard.getRecentCases.queryOptions());
   const { data: upcomingDeadlines } = useQuery(
