@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader } from "@workspace/ui/components/card";
-import { cn } from "@workspace/ui/lib/utils";
-import { TrendingDown, TrendingUp } from "lucide-react";
+import { Card, CardContent, CardHeader } from '@workspace/ui/components/card';
+import { cn } from '@workspace/ui/lib/utils';
+import { TrendingDown, TrendingUp } from 'lucide-react';
 
 interface MetricCardProps {
   title: string;
@@ -17,10 +17,8 @@ export function MetricCard({ title, value, icon, trend }: MetricCardProps) {
         {trend !== undefined && (
           <div
             className={cn(
-              "flex items-center rounded-full px-2 py-1 text-xs font-medium",
-              trend > 0
-                ? "bg-green-100 text-green-800"
-                : "bg-red-100 text-red-800"
+              'flex items-center rounded-full px-2 py-1 text-xs font-medium',
+              trend > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
             )}
           >
             {trend > 0 ? (
@@ -38,4 +36,4 @@ export function MetricCard({ title, value, icon, trend }: MetricCardProps) {
       </CardContent>
     </Card>
   );
-} 
+}

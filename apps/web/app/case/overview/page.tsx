@@ -1,4 +1,4 @@
-import { CaseOverview } from "./components/case-overview"
+import { CaseOverview } from './components/case-overview';
 
 export default function CaseOverviewPage() {
   return (
@@ -13,5 +13,5 @@ export default function CaseOverviewPage() {
         <CaseOverview />
       </div>
     </div>
-  )
-} 
+  );
+}

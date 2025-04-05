@@ -1,64 +1,70 @@
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card";
-import { Progress } from "@workspace/ui/components/progress";
-import { AlertTriangle, Brain, FileText, Gavel, Scale, Shield } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@workspace/ui/components/card';
+import { Progress } from '@workspace/ui/components/progress';
+import { AlertTriangle, Brain, FileText, Gavel, Scale, Shield } from 'lucide-react';
 
 const strengthCategories = [
   {
-    name: "Evidence Quality",
+    name: 'Evidence Quality',
     score: 88,
     icon: FileText,
     details: [
-      { name: "Medical Records", score: 92, status: "strong" },
-      { name: "Expert Testimony", score: 85, status: "strong" },
-      { name: "Witness Statements", score: 78, status: "moderate" },
-      { name: "Physical Evidence", score: 95, status: "strong" }
-    ]
+      { name: 'Medical Records', score: 92, status: 'strong' },
+      { name: 'Expert Testimony', score: 85, status: 'strong' },
+      { name: 'Witness Statements', score: 78, status: 'moderate' },
+      { name: 'Physical Evidence', score: 95, status: 'strong' },
+    ],
   },
   {
-    name: "Legal Merit",
+    name: 'Legal Merit',
     score: 82,
     icon: Gavel,
     details: [
-      { name: "Statutory Compliance", score: 95, status: "strong" },
-      { name: "Precedent Alignment", score: 85, status: "strong" },
-      { name: "Jurisdictional Factors", score: 75, status: "moderate" },
-      { name: "Legal Theory", score: 88, status: "strong" }
-    ]
+      { name: 'Statutory Compliance', score: 95, status: 'strong' },
+      { name: 'Precedent Alignment', score: 85, status: 'strong' },
+      { name: 'Jurisdictional Factors', score: 75, status: 'moderate' },
+      { name: 'Legal Theory', score: 88, status: 'strong' },
+    ],
   },
   {
-    name: "Damages Assessment",
+    name: 'Damages Assessment',
     score: 90,
     icon: Shield,
     details: [
-      { name: "Economic Damages", score: 92, status: "strong" },
-      { name: "Non-Economic Damages", score: 88, status: "strong" },
-      { name: "Future Damages", score: 85, status: "strong" },
-      { name: "Comparative Verdicts", score: 95, status: "strong" }
-    ]
-  }
+      { name: 'Economic Damages', score: 92, status: 'strong' },
+      { name: 'Non-Economic Damages', score: 88, status: 'strong' },
+      { name: 'Future Damages', score: 85, status: 'strong' },
+      { name: 'Comparative Verdicts', score: 95, status: 'strong' },
+    ],
+  },
 ];
 
 const riskFactors = [
   {
-    name: "Opposing Arguments",
-    description: "Defense may challenge causation based on pre-existing conditions",
-    severity: "medium",
-    mitigation: "Obtain additional expert testimony to address causation"
+    name: 'Opposing Arguments',
+    description: 'Defense may challenge causation based on pre-existing conditions',
+    severity: 'medium',
+    mitigation: 'Obtain additional expert testimony to address causation',
   },
   {
-    name: "Evidence Gaps",
-    description: "Missing physical therapy records from June-August period",
-    severity: "high",
-    mitigation: "Subpoena records from all treatment facilities"
+    name: 'Evidence Gaps',
+    description: 'Missing physical therapy records from June-August period',
+    severity: 'high',
+    mitigation: 'Subpoena records from all treatment facilities',
   },
   {
-    name: "Witness Reliability",
-    description: "Key witness has potential credibility issues",
-    severity: "medium",
-    mitigation: "Gather additional corroborating evidence"
-  }
+    name: 'Witness Reliability',
+    description: 'Key witness has potential credibility issues',
+    severity: 'medium',
+    mitigation: 'Gather additional corroborating evidence',
+  },
 ];
 
 export default function CaseStrength() {
@@ -127,20 +133,26 @@ export default function CaseStrength() {
                       <div key={detail.name} className="space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-sm">{detail.name}</span>
-                          <span className={`text-sm font-medium ${
-                            detail.score >= 80 ? 'text-green-600' :
-                            detail.score >= 60 ? 'text-yellow-600' :
-                            'text-red-600'
-                          }`}>
+                          <span
+                            className={`text-sm font-medium ${
+                              detail.score >= 80
+                                ? 'text-green-600'
+                                : detail.score >= 60
+                                  ? 'text-yellow-600'
+                                  : 'text-red-600'
+                            }`}
+                          >
                             {detail.score}%
                           </span>
                         </div>
-                        <Progress 
-                          value={detail.score} 
+                        <Progress
+                          value={detail.score}
                           className={
-                            detail.score >= 80 ? 'text-green-600' :
-                            detail.score >= 60 ? 'text-yellow-600' :
-                            'text-red-600'
+                            detail.score >= 80
+                              ? 'text-green-600'
+                              : detail.score >= 60
+                                ? 'text-yellow-600'
+                                : 'text-red-600'
                           }
                         />
                       </div>
@@ -159,9 +171,7 @@ export default function CaseStrength() {
               <AlertTriangle className="h-5 w-5 text-primary" />
               Risk Factors
             </CardTitle>
-            <CardDescription>
-              Identified risks and mitigation strategies
-            </CardDescription>
+            <CardDescription>Identified risks and mitigation strategies</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -172,11 +182,15 @@ export default function CaseStrength() {
                       <h4 className="font-medium">{risk.name}</h4>
                       <p className="text-sm text-muted-foreground">{risk.description}</p>
                     </div>
-                    <span className={`px-2 py-1 rounded-full text-xs ${
-                      risk.severity === 'high' ? 'bg-red-100 text-red-700' :
-                      risk.severity === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-green-100 text-green-700'
-                    }`}>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs ${
+                        risk.severity === 'high'
+                          ? 'bg-red-100 text-red-700'
+                          : risk.severity === 'medium'
+                            ? 'bg-yellow-100 text-yellow-700'
+                            : 'bg-green-100 text-green-700'
+                      }`}
+                    >
                       {risk.severity.charAt(0).toUpperCase() + risk.severity.slice(1)} Risk
                     </span>
                   </div>
@@ -192,4 +206,4 @@ export default function CaseStrength() {
       </div>
     </div>
   );
-} 
+}

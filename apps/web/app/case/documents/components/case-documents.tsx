@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from "@workspace/ui/components/button";
-import { Checkbox } from "@workspace/ui/components/checkbox";
+import { Button } from '@workspace/ui/components/button';
+import { Checkbox } from '@workspace/ui/components/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -10,22 +10,22 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@workspace/ui/components/dialog";
+} from '@workspace/ui/components/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@workspace/ui/components/dropdown-menu";
-import { Input } from "@workspace/ui/components/input";
+} from '@workspace/ui/components/dropdown-menu';
+import { Input } from '@workspace/ui/components/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@workspace/ui/components/select";
+} from '@workspace/ui/components/select';
 import {
   Table,
   TableBody,
@@ -33,13 +33,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@workspace/ui/components/table";
+} from '@workspace/ui/components/table';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@workspace/ui/components/tooltip";
+} from '@workspace/ui/components/tooltip';
 import {
   AlertCircle,
   Download,
@@ -54,88 +54,88 @@ import {
   Tags,
   Trash2,
   Upload,
-  X
-} from "lucide-react";
-import Link from "next/link";
-import { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
+  X,
+} from 'lucide-react';
+import Link from 'next/link';
+import { useCallback, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
 
 type Document = {
   id: string;
   name: string;
   type: string;
-  category: "medical" | "legal" | "evidence" | "correspondence" | "billing";
+  category: 'medical' | 'legal' | 'evidence' | 'correspondence' | 'billing';
   dateAdded: Date;
   lastModified: Date;
   size: string;
   tags: string[];
-  status: "draft" | "final" | "archived";
-}
+  status: 'draft' | 'final' | 'archived';
+};
 
 const sampleDocuments: Document[] = [
   {
-    id: "1",
-    name: "Initial Medical Report.pdf",
-    type: "PDF",
-    category: "medical",
-    dateAdded: new Date("2024-02-15"),
-    lastModified: new Date("2024-02-15"),
-    size: "2.4 MB",
-    tags: ["medical", "initial-assessment"],
-    status: "final",
+    id: '1',
+    name: 'Initial Medical Report.pdf',
+    type: 'PDF',
+    category: 'medical',
+    dateAdded: new Date('2024-02-15'),
+    lastModified: new Date('2024-02-15'),
+    size: '2.4 MB',
+    tags: ['medical', 'initial-assessment'],
+    status: 'final',
   },
   {
-    id: "2",
-    name: "Police Report.pdf",
-    type: "PDF",
-    category: "evidence",
-    dateAdded: new Date("2024-02-15"),
-    lastModified: new Date("2024-02-15"),
-    size: "1.8 MB",
-    tags: ["police", "incident"],
-    status: "final",
+    id: '2',
+    name: 'Police Report.pdf',
+    type: 'PDF',
+    category: 'evidence',
+    dateAdded: new Date('2024-02-15'),
+    lastModified: new Date('2024-02-15'),
+    size: '1.8 MB',
+    tags: ['police', 'incident'],
+    status: 'final',
   },
   {
-    id: "3",
-    name: "Client Statement.docx",
-    type: "DOCX",
-    category: "legal",
-    dateAdded: new Date("2024-02-20"),
-    lastModified: new Date("2024-03-01"),
-    size: "156 KB",
-    tags: ["statement", "client"],
-    status: "final",
+    id: '3',
+    name: 'Client Statement.docx',
+    type: 'DOCX',
+    category: 'legal',
+    dateAdded: new Date('2024-02-20'),
+    lastModified: new Date('2024-03-01'),
+    size: '156 KB',
+    tags: ['statement', 'client'],
+    status: 'final',
   },
   {
-    id: "4",
-    name: "Medical Bills.pdf",
-    type: "PDF",
-    category: "billing",
-    dateAdded: new Date("2024-03-10"),
-    lastModified: new Date("2024-03-10"),
-    size: "890 KB",
-    tags: ["medical", "billing"],
-    status: "final",
+    id: '4',
+    name: 'Medical Bills.pdf',
+    type: 'PDF',
+    category: 'billing',
+    dateAdded: new Date('2024-03-10'),
+    lastModified: new Date('2024-03-10'),
+    size: '890 KB',
+    tags: ['medical', 'billing'],
+    status: 'final',
   },
   {
-    id: "5",
-    name: "Settlement Draft.docx",
-    type: "DOCX",
-    category: "legal",
-    dateAdded: new Date("2024-04-01"),
-    lastModified: new Date("2024-04-05"),
-    size: "245 KB",
-    tags: ["settlement", "draft"],
-    status: "draft",
+    id: '5',
+    name: 'Settlement Draft.docx',
+    type: 'DOCX',
+    category: 'legal',
+    dateAdded: new Date('2024-04-01'),
+    lastModified: new Date('2024-04-05'),
+    size: '245 KB',
+    tags: ['settlement', 'draft'],
+    status: 'draft',
   },
 ];
 
 const categoryColors = {
-  medical: "text-rose-500 bg-rose-50",
-  legal: "text-blue-500 bg-blue-50",
-  evidence: "text-amber-500 bg-amber-50",
-  correspondence: "text-purple-500 bg-purple-50",
-  billing: "text-green-500 bg-green-50",
+  medical: 'text-rose-500 bg-rose-50',
+  legal: 'text-blue-500 bg-blue-50',
+  evidence: 'text-amber-500 bg-amber-50',
+  correspondence: 'text-purple-500 bg-purple-50',
+  billing: 'text-green-500 bg-green-50',
 };
 
 type UploadingFile = {
@@ -144,7 +144,7 @@ type UploadingFile = {
   category: Document['category'];
   progress: number;
   error?: string;
-}
+};
 
 export function CaseDocuments() {
   const [selectedCategory, setSelectedCategory] = useState<Document['category'] | 'all'>('all');
@@ -152,17 +152,17 @@ export function CaseDocuments() {
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const [newFolderDialogOpen, setNewFolderDialogOpen] = useState(false);
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<Document['status'] | 'all'>('all');
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    const newFiles = acceptedFiles.map(file => ({
+    const newFiles = acceptedFiles.map((file) => ({
       id: Math.random().toString(36).substring(7),
       file,
       category: 'legal' as Document['category'],
-      progress: 0
+      progress: 0,
     }));
-    setUploadingFiles(prev => [...prev, ...newFiles]);
+    setUploadingFiles((prev) => [...prev, ...newFiles]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -172,39 +172,31 @@ export function CaseDocuments() {
       'application/msword': ['.doc'],
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
       'image/jpeg': ['.jpg', '.jpeg'],
-      'image/png': ['.png']
-    }
+      'image/png': ['.png'],
+    },
   });
 
   const removeUploadingFile = (fileId: string) => {
-    setUploadingFiles(prev => prev.filter(f => f.id !== fileId));
+    setUploadingFiles((prev) => prev.filter((f) => f.id !== fileId));
   };
 
   const updateFileCategory = (fileId: string, category: Document['category']) => {
-    setUploadingFiles(prev =>
-      prev.map(f =>
-        f.id === fileId ? { ...f, category } : f
-      )
-    );
+    setUploadingFiles((prev) => prev.map((f) => (f.id === fileId ? { ...f, category } : f)));
   };
 
   const handleUpload = async () => {
     // Simulate upload progress
     for (let progress = 0; progress <= 100; progress += 10) {
-      setUploadingFiles(prev =>
-        prev.map(f => ({ ...f, progress }))
-      );
-      await new Promise(resolve => setTimeout(resolve, 100));
+      setUploadingFiles((prev) => prev.map((f) => ({ ...f, progress })));
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
     setUploadDialogOpen(false);
     setUploadingFiles([]);
   };
 
   const handleSelectDocument = (documentId: string) => {
-    setSelectedDocuments(prev =>
-      prev.includes(documentId)
-        ? prev.filter(id => id !== documentId)
-        : [...prev, documentId]
+    setSelectedDocuments((prev) =>
+      prev.includes(documentId) ? prev.filter((id) => id !== documentId) : [...prev, documentId]
     );
   };
 
@@ -212,17 +204,18 @@ export function CaseDocuments() {
     if (selectedDocuments.length === sampleDocuments.length) {
       setSelectedDocuments([]);
     } else {
-      setSelectedDocuments(sampleDocuments.map(doc => doc.id));
+      setSelectedDocuments(sampleDocuments.map((doc) => doc.id));
     }
   };
 
   const filteredDocuments = sampleDocuments
-    .filter(doc => selectedCategory === "all" || doc.category === selectedCategory)
-    .filter(doc => statusFilter === 'all' || doc.status === statusFilter)
-    .filter(doc => 
-      searchQuery === "" || 
-      doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doc.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+    .filter((doc) => selectedCategory === 'all' || doc.category === selectedCategory)
+    .filter((doc) => statusFilter === 'all' || doc.status === statusFilter)
+    .filter(
+      (doc) =>
+        searchQuery === '' ||
+        doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        doc.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
   const hasActiveFilters = selectedCategory !== 'all' || statusFilter !== 'all';
@@ -257,10 +250,13 @@ export function CaseDocuments() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Dialog open={uploadDialogOpen} onOpenChange={(open) => {
-              setUploadDialogOpen(open);
-              if (!open) setUploadingFiles([]);
-            }}>
+            <Dialog
+              open={uploadDialogOpen}
+              onOpenChange={(open) => {
+                setUploadDialogOpen(open);
+                if (!open) setUploadingFiles([]);
+              }}
+            >
               <DialogTrigger asChild>
                 <Button>
                   <Upload className="mr-2 h-4 w-4" />
@@ -271,10 +267,11 @@ export function CaseDocuments() {
                 <DialogHeader>
                   <DialogTitle>Upload Documents</DialogTitle>
                   <DialogDescription>
-                    Upload one or more documents to the case file. Supported formats: PDF, DOC, DOCX, JPG, PNG
+                    Upload one or more documents to the case file. Supported formats: PDF, DOC,
+                    DOCX, JPG, PNG
                   </DialogDescription>
                 </DialogHeader>
-                
+
                 <div className="grid gap-6 py-4">
                   <div
                     {...getRootProps()}
@@ -314,9 +311,7 @@ export function CaseDocuments() {
                             <FileText className="h-8 w-8 text-muted-foreground" />
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between">
-                                <p className="text-sm font-medium truncate">
-                                  {file.file.name}
-                                </p>
+                                <p className="text-sm font-medium truncate">{file.file.name}</p>
                                 <Button
                                   variant="ghost"
                                   size="icon"
@@ -328,7 +323,9 @@ export function CaseDocuments() {
                               <div className="flex items-center gap-4 mt-2">
                                 <Select
                                   value={file.category}
-                                  onValueChange={(value) => updateFileCategory(file.id, value as Document['category'])}
+                                  onValueChange={(value) =>
+                                    updateFileCategory(file.id, value as Document['category'])
+                                  }
                                 >
                                   <SelectTrigger className="w-[180px]">
                                     <SelectValue />
@@ -371,10 +368,7 @@ export function CaseDocuments() {
                   <Button variant="outline" onClick={() => setUploadDialogOpen(false)}>
                     Cancel
                   </Button>
-                  <Button
-                    onClick={handleUpload}
-                    disabled={uploadingFiles.length === 0}
-                  >
+                  <Button onClick={handleUpload} disabled={uploadingFiles.length === 0}>
                     Upload {uploadingFiles.length > 0 && `(${uploadingFiles.length} files)`}
                   </Button>
                 </DialogFooter>
@@ -391,16 +385,11 @@ export function CaseDocuments() {
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Create New Folder</DialogTitle>
-                  <DialogDescription>
-                    Enter a name for the new folder.
-                  </DialogDescription>
+                  <DialogDescription>Enter a name for the new folder.</DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                   <div className="grid gap-2">
-                    <Input
-                      id="name"
-                      placeholder="Folder name"
-                    />
+                    <Input id="name" placeholder="Folder name" />
                   </div>
                 </div>
                 <DialogFooter>
@@ -448,9 +437,7 @@ export function CaseDocuments() {
                 <Button variant="outline" size="default">
                   <Filter className="mr-2 h-4 w-4" />
                   Filters
-                  {hasActiveFilters && (
-                    <span className="ml-2 rounded-full bg-primary w-2 h-2" />
-                  )}
+                  {hasActiveFilters && <span className="ml-2 rounded-full bg-primary w-2 h-2" />}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-[240px]">
@@ -459,7 +446,9 @@ export function CaseDocuments() {
                     <h4 className="font-medium leading-none">Category</h4>
                     <Select
                       value={selectedCategory}
-                      onValueChange={(value) => setSelectedCategory(value as Document['category'] | 'all')}
+                      onValueChange={(value) =>
+                        setSelectedCategory(value as Document['category'] | 'all')
+                      }
                     >
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select category" />
@@ -504,7 +493,9 @@ export function CaseDocuments() {
                     <h4 className="font-medium leading-none">Status</h4>
                     <Select
                       value={statusFilter}
-                      onValueChange={(value) => setStatusFilter(value as Document['status'] | 'all')}
+                      onValueChange={(value) =>
+                        setStatusFilter(value as Document['status'] | 'all')
+                      }
                     >
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select status" />
@@ -605,7 +596,9 @@ export function CaseDocuments() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${categoryColors[doc.category]}`}>
+                    <div
+                      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${categoryColors[doc.category]}`}
+                    >
                       {doc.category.charAt(0).toUpperCase() + doc.category.slice(1)}
                     </div>
                   </TableCell>
@@ -613,10 +606,14 @@ export function CaseDocuments() {
                   <TableCell>{doc.lastModified.toLocaleDateString()}</TableCell>
                   <TableCell>{doc.size}</TableCell>
                   <TableCell>
-                    <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                      ${doc.status === 'draft' ? 'bg-yellow-50 text-yellow-600' :
-                        doc.status === 'final' ? 'bg-green-50 text-green-600' :
-                        'bg-gray-50 text-gray-600'
+                    <div
+                      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
+                      ${
+                        doc.status === 'draft'
+                          ? 'bg-yellow-50 text-yellow-600'
+                          : doc.status === 'final'
+                            ? 'bg-green-50 text-green-600'
+                            : 'bg-gray-50 text-gray-600'
                       }`}
                     >
                       {doc.status.charAt(0).toUpperCase() + doc.status.slice(1)}
@@ -683,4 +680,4 @@ export function CaseDocuments() {
       </div>
     </TooltipProvider>
   );
-} 
+}

@@ -29,7 +29,6 @@ export default async function RootLayout({
     queryClient.prefetchQuery(trpc.currentUser.getCases.queryOptions()),
   ]);
   return (
-    
     <html lang="en" suppressHydrationWarning>
       <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}>
         <Providers>

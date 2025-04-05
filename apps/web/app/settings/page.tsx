@@ -1,14 +1,14 @@
-"use client"
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@workspace/ui/components/button"
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@workspace/ui/components/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@workspace/ui/components/card"
+} from '@workspace/ui/components/card';
 import {
   Form,
   FormControl,
@@ -17,46 +17,44 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@workspace/ui/components/form"
-import { Input } from "@workspace/ui/components/input"
-import { Textarea } from "@workspace/ui/components/textarea"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
+} from '@workspace/ui/components/form';
+import { Input } from '@workspace/ui/components/input';
+import { Textarea } from '@workspace/ui/components/textarea';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
 const profileFormSchema = z.object({
   name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
+    message: 'Name must be at least 2 characters.',
   }),
   email: z.string().email(),
   bio: z.string().max(160).optional(),
   role: z.string().optional(),
-})
+});
 
-type ProfileFormValues = z.infer<typeof profileFormSchema>
+type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export default function SettingsProfilePage() {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      bio: "",
-      role: "",
+      name: '',
+      email: '',
+      bio: '',
+      role: '',
     },
-  })
+  });
 
   function onSubmit(data: ProfileFormValues) {
     // TODO: Implement profile update
-    console.log(data)
+    console.log(data);
   }
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Profile</CardTitle>
-        <CardDescription>
-          Manage your public profile information.
-        </CardDescription>
+        <CardDescription>Manage your public profile information.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -114,7 +112,8 @@ export default function SettingsProfilePage() {
                     />
                   </FormControl>
                   <FormDescription>
-                    You can write a short bio about yourself. This will be displayed on your profile.
+                    You can write a short bio about yourself. This will be displayed on your
+                    profile.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -125,5 +124,5 @@ export default function SettingsProfilePage() {
         </Form>
       </CardContent>
     </Card>
-  )
-} 
+  );
+}

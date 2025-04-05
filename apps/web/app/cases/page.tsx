@@ -1,17 +1,17 @@
 'use client';
 
-import { StatusBadge } from "@/components/status-badge";
-import { useStore } from "@/lib/store";
-import { useTRPC } from "@/trpc/client";
-import { useQuery } from "@tanstack/react-query";
-import { Button } from "@workspace/ui/components/button";
+import { StatusBadge } from '@/components/status-badge';
+import { useStore } from '@/lib/store';
+import { useTRPC } from '@/trpc/client';
+import { useQuery } from '@tanstack/react-query';
+import { Button } from '@workspace/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@workspace/ui/components/dropdown-menu";
-import { Input } from "@workspace/ui/components/input";
+} from '@workspace/ui/components/dropdown-menu';
+import { Input } from '@workspace/ui/components/input';
 import {
   Table,
   TableBody,
@@ -19,9 +19,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@workspace/ui/components/table";
-import { Calendar, Eye, FileText, Filter, Search, Trash2, UserCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
+} from '@workspace/ui/components/table';
+import { Calendar, Eye, FileText, Filter, Search, Trash2, UserCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function CasesPage() {
   const router = useRouter();
@@ -77,9 +77,7 @@ export default function CasesPage() {
               <Input
                 placeholder="Search cases..."
                 value={caseFilters.search}
-                onChange={(e) =>
-                  setCaseFilters({ ...caseFilters, search: e.target.value })
-                }
+                onChange={(e) => setCaseFilters({ ...caseFilters, search: e.target.value })}
                 className="pl-9"
               />
             </div>
@@ -87,21 +85,17 @@ export default function CasesPage() {
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="w-full sm:w-[180px] justify-start">
                   <Filter className="mr-2 h-4 w-4" />
-                  {caseFilters.status || "All Statuses"}
+                  {caseFilters.status || 'All Statuses'}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-[180px]">
-                <DropdownMenuItem
-                  onClick={() => setCaseFilters({ ...caseFilters, status: "" })}
-                >
+                <DropdownMenuItem onClick={() => setCaseFilters({ ...caseFilters, status: '' })}>
                   All Statuses
                 </DropdownMenuItem>
                 {statuses?.map((status) => (
                   <DropdownMenuItem
                     key={status}
-                    onClick={() =>
-                      setCaseFilters({ ...caseFilters, status: status })
-                    }
+                    onClick={() => setCaseFilters({ ...caseFilters, status: status })}
                   >
                     {status}
                   </DropdownMenuItem>
@@ -166,13 +160,11 @@ export default function CasesPage() {
                           {case_.nextHearing}
                         </div>
                       ) : (
-                        "N/A"
+                        'N/A'
                       )}
                     </TableCell>
                     <TableCell>{case_.assignedAttorney}</TableCell>
-                    <TableCell className="max-w-[200px] truncate">
-                      {case_.lastActivity}
-                    </TableCell>
+                    <TableCell className="max-w-[200px] truncate">{case_.lastActivity}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Button
@@ -203,4 +195,4 @@ export default function CasesPage() {
       </div>
     </div>
   );
-} 
+}

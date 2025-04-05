@@ -1,8 +1,14 @@
 'use client';
 
-import { Button } from "@workspace/ui/components/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@workspace/ui/components/dialog";
-import { Plus } from "lucide-react";
+import { Button } from '@workspace/ui/components/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@workspace/ui/components/dialog';
+import { Plus } from 'lucide-react';
 
 export function AddEventDialog() {
   return (
@@ -17,10 +23,8 @@ export function AddEventDialog() {
         <DialogHeader>
           <DialogTitle>Add New Event</DialogTitle>
         </DialogHeader>
-        <p className="text-sm text-muted-foreground">
-          Event creation functionality coming soon!
-        </p>
+        <p className="text-sm text-muted-foreground">Event creation functionality coming soon!</p>
       </DialogContent>
     </Dialog>
   );
-} 
+}

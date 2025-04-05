@@ -1,6 +1,6 @@
 'use client';
 
-import { CaseDocuments } from "./components/case-documents";
+import { CaseDocuments } from './components/case-documents';
 
 export default function DocumentsPage() {
   return (
@@ -15,5 +15,5 @@ export default function DocumentsPage() {
         <CaseDocuments />
       </div>
     </div>
-  )
-} 
+  );
+}

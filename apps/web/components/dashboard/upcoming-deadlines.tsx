@@ -1,6 +1,6 @@
-import { Button } from "@workspace/ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/card";
-import { ArrowRight, Calendar } from "lucide-react";
+import { Button } from '@workspace/ui/components/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
+import { ArrowRight, Calendar } from 'lucide-react';
 
 interface Deadline {
   id: number;
@@ -27,17 +27,10 @@ export function UpcomingDeadlines({ deadlines }: UpcomingDeadlinesProps) {
       <CardContent>
         <div className="space-y-6">
           {deadlines.map((deadline) => (
-            <div
-              key={deadline.id}
-              className="flex items-center justify-between space-x-4"
-            >
+            <div key={deadline.id} className="flex items-center justify-between space-x-4">
               <div className="space-y-1">
-                <p className="text-sm font-medium leading-none">
-                  {deadline.title}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Case: {deadline.caseId}
-                </p>
+                <p className="text-sm font-medium leading-none">{deadline.title}</p>
+                <p className="text-sm text-muted-foreground">Case: {deadline.caseId}</p>
               </div>
               <div className="flex items-center gap-2 text-sm font-medium text-primary">
                 <Calendar className="h-4 w-4" />
@@ -49,4 +42,4 @@ export function UpcomingDeadlines({ deadlines }: UpcomingDeadlinesProps) {
       </CardContent>
     </Card>
   );
-} 
+}

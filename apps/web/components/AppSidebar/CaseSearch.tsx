@@ -12,11 +12,11 @@ export function CaseSearch() {
   const [searchQuery, setSearchQuery] = React.useState('');
   const trpc = useTRPC();
   const { selectedCaseId, setSelectedCaseId } = useStore();
-  
+
   const { data: cases = [] } = useQuery(trpc.currentUser.getCases.queryOptions());
-  
+
   const currentCase = React.useMemo(() => {
-    return cases.find(c => c.id === selectedCaseId) || cases[0] || null;
+    return cases.find((c) => c.id === selectedCaseId) || cases[0] || null;
   }, [cases, selectedCaseId]);
 
   React.useEffect(() => {
@@ -25,7 +25,7 @@ export function CaseSearch() {
       setSelectedCaseId(firstCase.id);
     }
   }, [cases, selectedCaseId, setSelectedCaseId]);
-  
+
   const handleSelect = (caseItem: typeof currentCase) => {
     if (caseItem) {
       setSelectedCaseId(caseItem.id);
@@ -51,4 +51,4 @@ export function CaseSearch() {
       addNewText="Add New Case"
     />
   );
-} 
+}

@@ -11,11 +11,7 @@ import {
   CommandItem,
   CommandList,
 } from '@workspace/ui/components/command';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@workspace/ui/components/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@workspace/ui/components/popover';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@workspace/ui/components/sidebar';
 
 interface Item {
@@ -56,9 +52,7 @@ export function SidebarPopoverMenu<T extends Item>({
 }: SidebarPopoverMenuProps<T>) {
   const filteredItems = React.useMemo(() => {
     if (!searchQuery) return items;
-    return items.filter((item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    return items.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
   }, [items, searchQuery]);
 
   const itemsToShow = searchQuery ? filteredItems : items;
@@ -69,24 +63,14 @@ export function SidebarPopoverMenu<T extends Item>({
       <SidebarMenuItem className="rounded-lg border bg-background">
         <Popover open={isOpen} onOpenChange={onOpenChange}>
           <PopoverTrigger asChild>
-            <SidebarMenuButton
-              size="md"
-              className="data-[state=open]:bg-accent/50"
-            >
+            <SidebarMenuButton size="md" className="data-[state=open]:bg-accent/50">
               <Icon className="size-4 text-muted-foreground" />
-              <span className="ml-2 truncate text-sm">
-                {selectedItem?.name || title}
-              </span>
+              <span className="ml-2 truncate text-sm">{selectedItem?.name || title}</span>
             </SidebarMenuButton>
           </PopoverTrigger>
-          <PopoverContent 
-            className="w-full p-0" 
-            align="start" 
-            side="bottom" 
-            sideOffset={4}
-          >
+          <PopoverContent className="w-full p-0" align="start" side="bottom" sideOffset={4}>
             <Command className="rounded-lg border shadow-md">
-              <CommandInput 
+              <CommandInput
                 placeholder={placeholder}
                 value={searchQuery}
                 onValueChange={onSearch}
@@ -109,7 +93,7 @@ export function SidebarPopoverMenu<T extends Item>({
                   </CommandGroup>
                 )}
                 <div className="border-t px-2 pb-2 pt-1">
-                  <button 
+                  <button
                     className="flex w-full select-none items-center justify-start rounded-md p-2 text-sm leading-none text-primary no-underline outline-none transition-colors hover:bg-accent/50"
                     onClick={() => onOpenChange(false)}
                   >
@@ -124,4 +108,4 @@ export function SidebarPopoverMenu<T extends Item>({
       </SidebarMenuItem>
     </SidebarMenu>
   );
-} 
+}

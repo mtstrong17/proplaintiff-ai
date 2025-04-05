@@ -1,10 +1,10 @@
-import { AddEventDialog } from "@/components/calendar/AddEventDialog";
-import { CalendarView } from "@/components/calendar/CalendarView";
-import { getQueryClient, trpc } from "@/trpc/server";
-import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/card";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { Suspense } from "react";
+import { AddEventDialog } from '@/components/calendar/AddEventDialog';
+import { CalendarView } from '@/components/calendar/CalendarView';
+import { getQueryClient, trpc } from '@/trpc/server';
+import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
+import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
+import { Calendar as CalendarIcon } from 'lucide-react';
+import { Suspense } from 'react';
 
 export default async function CalendarPage() {
   const queryClient = getQueryClient();
@@ -39,4 +39,4 @@ export default async function CalendarPage() {
       </div>
     </HydrationBoundary>
   );
-} 
+}

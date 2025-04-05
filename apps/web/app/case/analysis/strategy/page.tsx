@@ -1,17 +1,15 @@
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card";
-import { Progress } from "@workspace/ui/components/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@workspace/ui/components/tabs";
 import {
-  ArrowRight,
-  CheckCircle2,
-  Clock,
-  Flag,
-  ListTodo,
-  Target,
-  Users
-} from "lucide-react";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@workspace/ui/components/card';
+import { Progress } from '@workspace/ui/components/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui/components/tabs';
+import { ArrowRight, CheckCircle2, Clock, Flag, ListTodo, Target, Users } from 'lucide-react';
 
 type Priority = 'critical' | 'high' | 'medium' | 'low';
 type Status = 'pending' | 'in_progress' | 'completed' | 'blocked';
@@ -30,103 +28,104 @@ interface ActionItem {
 
 const actionItems: ActionItem[] = [
   {
-    id: "1",
-    title: "Complete Medical Record Collection",
-    description: "Obtain missing physical therapy records and specialist consultations",
-    priority: "critical",
-    status: "in_progress",
-    deadline: "2024-03-15",
-    assignedTo: "Jane Doe",
-    progress: 65
+    id: '1',
+    title: 'Complete Medical Record Collection',
+    description: 'Obtain missing physical therapy records and specialist consultations',
+    priority: 'critical',
+    status: 'in_progress',
+    deadline: '2024-03-15',
+    assignedTo: 'Jane Doe',
+    progress: 65,
   },
   {
-    id: "2",
-    title: "Expert Witness Preparation",
-    description: "Schedule preparation sessions with medical experts",
-    priority: "high",
-    status: "pending",
-    deadline: "2024-03-30",
-    dependencies: ["1"]
+    id: '2',
+    title: 'Expert Witness Preparation',
+    description: 'Schedule preparation sessions with medical experts',
+    priority: 'high',
+    status: 'pending',
+    deadline: '2024-03-30',
+    dependencies: ['1'],
   },
   {
-    id: "3",
-    title: "Settlement Demand Calculation",
-    description: "Prepare detailed damages calculation for settlement demand",
-    priority: "medium",
-    status: "pending",
-    deadline: "2024-04-15",
-    dependencies: ["1", "2"]
-  }
+    id: '3',
+    title: 'Settlement Demand Calculation',
+    description: 'Prepare detailed damages calculation for settlement demand',
+    priority: 'medium',
+    status: 'pending',
+    deadline: '2024-04-15',
+    dependencies: ['1', '2'],
+  },
 ];
 
 const preparationSteps = [
   {
-    category: "Document Preparation",
+    category: 'Document Preparation',
     tasks: [
       {
-        title: "Medical Record Summary",
-        status: "completed",
-        description: "Create comprehensive summary of all medical records"
+        title: 'Medical Record Summary',
+        status: 'completed',
+        description: 'Create comprehensive summary of all medical records',
       },
       {
-        title: "Timeline Documentation",
-        status: "in_progress",
-        description: "Develop detailed timeline of events and treatment"
-      }
-    ]
+        title: 'Timeline Documentation',
+        status: 'in_progress',
+        description: 'Develop detailed timeline of events and treatment',
+      },
+    ],
   },
   {
-    category: "Witness Preparation",
+    category: 'Witness Preparation',
     tasks: [
       {
-        title: "Expert Witness Coordination",
-        status: "pending",
-        description: "Schedule and prepare expert witnesses for testimony"
+        title: 'Expert Witness Coordination',
+        status: 'pending',
+        description: 'Schedule and prepare expert witnesses for testimony',
       },
       {
-        title: "Witness Interviews",
-        status: "in_progress",
-        description: "Conduct follow-up interviews with key witnesses"
-      }
-    ]
-  }
+        title: 'Witness Interviews',
+        status: 'in_progress',
+        description: 'Conduct follow-up interviews with key witnesses',
+      },
+    ],
+  },
 ];
 
 const negotiationStrategy = {
   strengths: [
     {
-      point: "Strong Medical Evidence",
-      details: "Clear documentation of injuries and causation",
-      impact: "high"
+      point: 'Strong Medical Evidence',
+      details: 'Clear documentation of injuries and causation',
+      impact: 'high',
     },
     {
-      point: "Multiple Witnesses",
-      details: "Three independent witnesses support our version of events",
-      impact: "high"
+      point: 'Multiple Witnesses',
+      details: 'Three independent witnesses support our version of events',
+      impact: 'high',
     },
     {
-      point: "Precedent Cases",
-      details: "Similar cases in jurisdiction with favorable outcomes",
-      impact: "medium"
-    }
+      point: 'Precedent Cases',
+      details: 'Similar cases in jurisdiction with favorable outcomes',
+      impact: 'medium',
+    },
   ],
   approach: [
     {
-      phase: "Initial Demand",
-      strategy: "Present comprehensive damages calculation with supporting evidence",
-      timing: "After expert witness preparation"
+      phase: 'Initial Demand',
+      strategy: 'Present comprehensive damages calculation with supporting evidence',
+      timing: 'After expert witness preparation',
     },
     {
-      phase: "Negotiation Points",
-      strategy: "Focus on clear liability and significant damages supported by medical evidence",
-      timing: "Throughout negotiation process"
+      phase: 'Negotiation Points',
+      strategy: 'Focus on clear liability and significant damages supported by medical evidence',
+      timing: 'Throughout negotiation process',
     },
     {
-      phase: "Bottom Line",
-      strategy: "Maintain firm position on core damages while showing flexibility on ancillary issues",
-      timing: "Late negotiation phase"
-    }
-  ]
+      phase: 'Bottom Line',
+      strategy:
+        'Maintain firm position on core damages while showing flexibility on ancillary issues',
+      timing: 'Late negotiation phase',
+    },
+  ],
 };
 
 export default function StrategyRecommendations() {
@@ -161,29 +160,40 @@ export default function StrategyRecommendations() {
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <h4 className="font-medium">{item.title}</h4>
-                        <span className={`px-2 py-1 rounded-full text-xs ${
-                          item.priority === 'critical' ? 'bg-red-100 text-red-700' :
-                          item.priority === 'high' ? 'bg-orange-100 text-orange-700' :
-                          item.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                          'bg-green-100 text-green-700'
-                        }`}>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs ${
+                            item.priority === 'critical'
+                              ? 'bg-red-100 text-red-700'
+                              : item.priority === 'high'
+                                ? 'bg-orange-100 text-orange-700'
+                                : item.priority === 'medium'
+                                  ? 'bg-yellow-100 text-yellow-700'
+                                  : 'bg-green-100 text-green-700'
+                          }`}
+                        >
                           {item.priority.charAt(0).toUpperCase() + item.priority.slice(1)}
                         </span>
                       </div>
                       <p className="text-sm text-muted-foreground">{item.description}</p>
                     </div>
-                    <div className={`px-2 py-1 rounded-full text-xs ${
-                      item.status === 'completed' ? 'bg-green-100 text-green-700' :
-                      item.status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
-                      item.status === 'blocked' ? 'bg-red-100 text-red-700' :
-                      'bg-slate-100 text-slate-700'
-                    }`}>
-                      {item.status.split('_').map(word => 
-                        word.charAt(0).toUpperCase() + word.slice(1)
-                      ).join(' ')}
+                    <div
+                      className={`px-2 py-1 rounded-full text-xs ${
+                        item.status === 'completed'
+                          ? 'bg-green-100 text-green-700'
+                          : item.status === 'in_progress'
+                            ? 'bg-blue-100 text-blue-700'
+                            : item.status === 'blocked'
+                              ? 'bg-red-100 text-red-700'
+                              : 'bg-slate-100 text-slate-700'
+                      }`}
+                    >
+                      {item.status
+                        .split('_')
+                        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                        .join(' ')}
                     </div>
                   </div>
-                  
+
                   {item.progress !== undefined && (
                     <div className="mt-4 space-y-1">
                       <div className="flex items-center justify-between text-sm">
@@ -242,12 +252,19 @@ export default function StrategyRecommendations() {
                   <CardContent>
                     <div className="space-y-4">
                       {section.tasks.map((task, index) => (
-                        <div key={index} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50">
-                          <div className={`rounded-full p-2 ${
-                            task.status === 'completed' ? 'bg-green-100 text-green-700' :
-                            task.status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
-                            'bg-slate-100 text-slate-700'
-                          }`}>
+                        <div
+                          key={index}
+                          className="flex items-start gap-4 p-4 rounded-lg bg-muted/50"
+                        >
+                          <div
+                            className={`rounded-full p-2 ${
+                              task.status === 'completed'
+                                ? 'bg-green-100 text-green-700'
+                                : task.status === 'in_progress'
+                                  ? 'bg-blue-100 text-blue-700'
+                                  : 'bg-slate-100 text-slate-700'
+                            }`}
+                          >
                             {task.status === 'completed' ? (
                               <CheckCircle2 className="h-4 w-4" />
                             ) : task.status === 'in_progress' ? (
@@ -279,11 +296,17 @@ export default function StrategyRecommendations() {
                 <CardContent>
                   <div className="space-y-4">
                     {negotiationStrategy.strengths.map((strength, index) => (
-                      <div key={index} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50">
-                        <div className={`rounded-full p-2 ${
-                          strength.impact === 'high' ? 'bg-green-100 text-green-700' :
-                          'bg-blue-100 text-blue-700'
-                        }`}>
+                      <div
+                        key={index}
+                        className="flex items-start gap-4 p-4 rounded-lg bg-muted/50"
+                      >
+                        <div
+                          className={`rounded-full p-2 ${
+                            strength.impact === 'high'
+                              ? 'bg-green-100 text-green-700'
+                              : 'bg-blue-100 text-blue-700'
+                          }`}
+                        >
                           <Target className="h-4 w-4" />
                         </div>
                         <div>
@@ -321,4 +344,4 @@ export default function StrategyRecommendations() {
       </div>
     </div>
   );
-} 
+}

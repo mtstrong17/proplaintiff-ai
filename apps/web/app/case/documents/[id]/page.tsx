@@ -1,6 +1,6 @@
 'use client';
 
-import { DocumentDetails } from "../components/document-details";
+import { DocumentDetails } from '../components/document-details';
 
 export default function DocumentPage({ params }: { params: { id: string } }) {
   return (
@@ -8,4 +8,4 @@ export default function DocumentPage({ params }: { params: { id: string } }) {
       <DocumentDetails documentId={params.id} />
     </div>
   );
-} 
+}

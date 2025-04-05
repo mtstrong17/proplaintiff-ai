@@ -6,7 +6,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
-  SidebarHeader
+  SidebarHeader,
 } from '@workspace/ui/components/sidebar';
 import { CaseNavigation } from './CaseNavigation';
 import { CaseSearch } from './CaseSearch';

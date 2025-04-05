@@ -1,6 +1,6 @@
 'use client';
 
-import { CaseTasks } from "./components/case-tasks";
+import { CaseTasks } from './components/case-tasks';
 
 export default function TasksPage() {
   return (
@@ -16,4 +16,4 @@ export default function TasksPage() {
       </div>
     </div>
   );
-} 
+}

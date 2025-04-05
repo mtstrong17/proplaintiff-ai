@@ -1,10 +1,10 @@
-import { Metadata } from "next"
-import { LeadsDataTable } from "./components/leads-data-table"
+import { Metadata } from 'next';
+import { LeadsDataTable } from './components/leads-data-table';
 
 export const metadata: Metadata = {
-  title: "Leads | ProPlaintiff AI",
-  description: "Manage and track potential client leads.",
-}
+  title: 'Leads | ProPlaintiff AI',
+  description: 'Manage and track potential client leads.',
+};
 
 export default function LeadsPage() {
   return (
@@ -19,5 +19,5 @@ export default function LeadsPage() {
         <LeadsDataTable />
       </div>
     </div>
-  )
-} 
+  );
+}

@@ -48,4 +48,4 @@ function OrganizationSwitcher() {
   );
 }
 
-export default OrganizationSwitcher; 
+export default OrganizationSwitcher;

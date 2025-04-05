@@ -1,8 +1,8 @@
 'use client';
 
-import { Button } from "@workspace/ui/components/button";
-import { Card } from "@workspace/ui/components/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@workspace/ui/components/tabs";
+import { Button } from '@workspace/ui/components/button';
+import { Card } from '@workspace/ui/components/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui/components/tabs';
 import {
   ArrowLeft,
   Calendar,
@@ -14,10 +14,10 @@ import {
   Share2,
   Tag,
   Timer,
-  Upload
-} from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
+  Upload,
+} from 'lucide-react';
+import Link from 'next/link';
+import { useState } from 'react';
 
 type Citation = {
   id: string;
@@ -26,76 +26,77 @@ type Citation = {
   context: string;
   addedBy: string;
   addedAt: Date;
-  type: "key-fact" | "evidence" | "argument" | "reference";
-}
+  type: 'key-fact' | 'evidence' | 'argument' | 'reference';
+};
 
 const sampleDocument = {
-  id: "1",
-  name: "Initial Medical Report.pdf",
-  type: "PDF",
-  category: "medical",
-  dateAdded: new Date("2024-02-15"),
-  lastModified: new Date("2024-02-15"),
-  size: "2.4 MB",
-  tags: ["medical", "initial-assessment"],
-  status: "final",
-  author: "Dr. Sarah Johnson",
-  facility: "City General Hospital",
-  summary: "Initial medical assessment following motor vehicle accident. Patient presents with whiplash and contusions. Recommended treatment includes pain management and physical therapy.",
+  id: '1',
+  name: 'Initial Medical Report.pdf',
+  type: 'PDF',
+  category: 'medical',
+  dateAdded: new Date('2024-02-15'),
+  lastModified: new Date('2024-02-15'),
+  size: '2.4 MB',
+  tags: ['medical', 'initial-assessment'],
+  status: 'final',
+  author: 'Dr. Sarah Johnson',
+  facility: 'City General Hospital',
+  summary:
+    'Initial medical assessment following motor vehicle accident. Patient presents with whiplash and contusions. Recommended treatment includes pain management and physical therapy.',
   citations: [
     {
-      id: "c1",
+      id: 'c1',
       page: 1,
-      text: "Patient presents with severe neck pain and limited range of motion consistent with whiplash injury",
-      context: "Initial Assessment",
-      addedBy: "John Smith",
-      addedAt: new Date("2024-02-16"),
-      type: "key-fact"
+      text: 'Patient presents with severe neck pain and limited range of motion consistent with whiplash injury',
+      context: 'Initial Assessment',
+      addedBy: 'John Smith',
+      addedAt: new Date('2024-02-16'),
+      type: 'key-fact',
     },
     {
-      id: "c2",
+      id: 'c2',
       page: 2,
-      text: "X-ray results show no fractures but significant soft tissue damage in cervical region",
-      context: "Diagnostic Results",
-      addedBy: "John Smith",
-      addedAt: new Date("2024-02-16"),
-      type: "evidence"
+      text: 'X-ray results show no fractures but significant soft tissue damage in cervical region',
+      context: 'Diagnostic Results',
+      addedBy: 'John Smith',
+      addedAt: new Date('2024-02-16'),
+      type: 'evidence',
     },
     {
-      id: "c3",
+      id: 'c3',
       page: 3,
-      text: "Recommended course of physical therapy: 2-3 sessions per week for 6-8 weeks",
-      context: "Treatment Plan",
-      addedBy: "Jane Doe",
-      addedAt: new Date("2024-02-17"),
-      type: "reference"
-    }
+      text: 'Recommended course of physical therapy: 2-3 sessions per week for 6-8 weeks',
+      context: 'Treatment Plan',
+      addedBy: 'Jane Doe',
+      addedAt: new Date('2024-02-17'),
+      type: 'reference',
+    },
   ] as Citation[],
   relatedDocuments: [
     {
-      id: "2",
-      name: "Follow-up Assessment.pdf",
-      type: "PDF",
-      category: "medical"
+      id: '2',
+      name: 'Follow-up Assessment.pdf',
+      type: 'PDF',
+      category: 'medical',
     },
     {
-      id: "3",
-      name: "Physical Therapy Plan.pdf",
-      type: "PDF",
-      category: "medical"
-    }
-  ]
+      id: '3',
+      name: 'Physical Therapy Plan.pdf',
+      type: 'PDF',
+      category: 'medical',
+    },
+  ],
 };
 
 const citationTypeColors = {
-  "key-fact": "bg-blue-50 text-blue-700 border-blue-200",
-  "evidence": "bg-green-50 text-green-700 border-green-200",
-  "argument": "bg-purple-50 text-purple-700 border-purple-200",
-  "reference": "bg-orange-50 text-orange-700 border-orange-200"
+  'key-fact': 'bg-blue-50 text-blue-700 border-blue-200',
+  evidence: 'bg-green-50 text-green-700 border-green-200',
+  argument: 'bg-purple-50 text-purple-700 border-purple-200',
+  reference: 'bg-orange-50 text-orange-700 border-orange-200',
 };
 
 export function DocumentDetails({ documentId }: { documentId: string }) {
-  const [activeTab, setActiveTab] = useState("summary");
+  const [activeTab, setActiveTab] = useState('summary');
 
   return (
     <div className="space-y-6">
@@ -146,7 +147,7 @@ export function DocumentDetails({ documentId }: { documentId: string }) {
                 <h2 className="text-lg font-semibold mb-4">Document Summary</h2>
                 <p className="text-muted-foreground">{sampleDocument.summary}</p>
               </Card>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <Card className="p-6">
                   <h3 className="text-sm font-medium mb-4">Document Details</h3>
@@ -238,10 +239,13 @@ export function DocumentDetails({ documentId }: { documentId: string }) {
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 space-y-2">
                         <div className="flex items-center gap-2">
-                          <div className={`px-2 py-1 rounded-full text-xs font-medium border ${citationTypeColors[citation.type]}`}>
-                            {citation.type.split("-").map(word => 
-                              word.charAt(0).toUpperCase() + word.slice(1)
-                            ).join(" ")}
+                          <div
+                            className={`px-2 py-1 rounded-full text-xs font-medium border ${citationTypeColors[citation.type]}`}
+                          >
+                            {citation.type
+                              .split('-')
+                              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                              .join(' ')}
                           </div>
                           <span className="text-sm text-muted-foreground">
                             Page {citation.page}
@@ -289,4 +293,4 @@ export function DocumentDetails({ documentId }: { documentId: string }) {
       </div>
     </div>
   );
-} 
+}

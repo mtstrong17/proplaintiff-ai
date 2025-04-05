@@ -1,9 +1,24 @@
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card";
-import { Progress } from "@workspace/ui/components/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@workspace/ui/components/tabs";
-import { AlertTriangle, Brain, Clock, FileText, Lightbulb, Scale, Target, TrendingUp } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@workspace/ui/components/card';
+import { Progress } from '@workspace/ui/components/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui/components/tabs';
+import {
+  AlertTriangle,
+  Brain,
+  Clock,
+  FileText,
+  Lightbulb,
+  Scale,
+  Target,
+  TrendingUp,
+} from 'lucide-react';
 
 export default function AnalysisOverview() {
   return (
@@ -24,7 +39,9 @@ export default function AnalysisOverview() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Case Strength Score</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Case Strength Score
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
@@ -38,7 +55,9 @@ export default function AnalysisOverview() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Document Analysis</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Document Analysis
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
@@ -52,7 +71,9 @@ export default function AnalysisOverview() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Key Issues Identified</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Key Issues Identified
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
@@ -60,15 +81,21 @@ export default function AnalysisOverview() {
                 <Lightbulb className="h-4 w-4 text-primary" />
               </div>
               <div className="flex items-center gap-2 mt-2">
-                <div className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">5 Supporting</div>
-                <div className="text-xs text-red-600 bg-red-100 px-2 py-1 rounded-full">3 Challenging</div>
+                <div className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">
+                  5 Supporting
+                </div>
+                <div className="text-xs text-red-600 bg-red-100 px-2 py-1 rounded-full">
+                  3 Challenging
+                </div>
               </div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Time to Trial</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Time to Trial
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
@@ -106,34 +133,44 @@ export default function AnalysisOverview() {
               <Card>
                 <CardHeader>
                   <CardTitle>Key Case Insights</CardTitle>
-                  <CardDescription>AI-generated insights based on case documents and data</CardDescription>
+                  <CardDescription>
+                    AI-generated insights based on case documents and data
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {[
                     {
-                      title: "Strong Evidence of Liability",
-                      description: "Multiple witness statements and expert reports support the claim of negligence.",
-                      type: "positive"
+                      title: 'Strong Evidence of Liability',
+                      description:
+                        'Multiple witness statements and expert reports support the claim of negligence.',
+                      type: 'positive',
                     },
                     {
-                      title: "Medical Documentation Gap",
-                      description: "Missing follow-up records from physical therapy sessions between June and August.",
-                      type: "negative"
+                      title: 'Medical Documentation Gap',
+                      description:
+                        'Missing follow-up records from physical therapy sessions between June and August.',
+                      type: 'negative',
                     },
                     {
-                      title: "Favorable Precedent Cases",
-                      description: "Three similar cases in the jurisdiction with favorable outcomes identified.",
-                      type: "positive"
-                    }
+                      title: 'Favorable Precedent Cases',
+                      description:
+                        'Three similar cases in the jurisdiction with favorable outcomes identified.',
+                      type: 'positive',
+                    },
                   ].map((insight, index) => (
                     <div key={index} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50">
-                      <div className={`rounded-full p-2 ${
-                        insight.type === 'positive' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                      }`}>
-                        {insight.type === 'positive' ? 
-                          <TrendingUp className="h-4 w-4" /> : 
+                      <div
+                        className={`rounded-full p-2 ${
+                          insight.type === 'positive'
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-red-100 text-red-700'
+                        }`}
+                      >
+                        {insight.type === 'positive' ? (
+                          <TrendingUp className="h-4 w-4" />
+                        ) : (
                           <AlertTriangle className="h-4 w-4" />
-                        }
+                        )}
                       </div>
                       <div>
                         <h4 className="font-medium">{insight.title}</h4>
@@ -156,25 +193,28 @@ export default function AnalysisOverview() {
                 <div className="space-y-4">
                   {[
                     {
-                      risk: "Statute of Limitations",
-                      impact: "Low",
-                      description: "Filing deadline is well within compliance.",
-                      color: "bg-green-100 text-green-700"
+                      risk: 'Statute of Limitations',
+                      impact: 'Low',
+                      description: 'Filing deadline is well within compliance.',
+                      color: 'bg-green-100 text-green-700',
                     },
                     {
-                      risk: "Evidence Gaps",
-                      impact: "Medium",
-                      description: "Some medical records need to be obtained.",
-                      color: "bg-yellow-100 text-yellow-700"
+                      risk: 'Evidence Gaps',
+                      impact: 'Medium',
+                      description: 'Some medical records need to be obtained.',
+                      color: 'bg-yellow-100 text-yellow-700',
                     },
                     {
-                      risk: "Expert Testimony",
-                      impact: "High",
-                      description: "Additional expert witnesses may be needed.",
-                      color: "bg-red-100 text-red-700"
-                    }
+                      risk: 'Expert Testimony',
+                      impact: 'High',
+                      description: 'Additional expert witnesses may be needed.',
+                      color: 'bg-red-100 text-red-700',
+                    },
                   ].map((risk, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 rounded-lg bg-muted/50">
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-4 rounded-lg bg-muted/50"
+                    >
                       <div className="flex items-start gap-4">
                         <AlertTriangle className="h-5 w-5 text-muted-foreground mt-1" />
                         <div>
@@ -202,34 +242,39 @@ export default function AnalysisOverview() {
                 <div className="space-y-4">
                   {[
                     {
-                      title: "Obtain Additional Medical Records",
-                      priority: "High",
-                      description: "Request complete physical therapy records from City Medical Center.",
-                      deadline: "Next 7 days"
+                      title: 'Obtain Additional Medical Records',
+                      priority: 'High',
+                      description:
+                        'Request complete physical therapy records from City Medical Center.',
+                      deadline: 'Next 7 days',
                     },
                     {
-                      title: "Schedule Expert Consultation",
-                      priority: "Medium",
-                      description: "Arrange meeting with Dr. Smith for medical expert testimony.",
-                      deadline: "Next 14 days"
+                      title: 'Schedule Expert Consultation',
+                      priority: 'Medium',
+                      description: 'Arrange meeting with Dr. Smith for medical expert testimony.',
+                      deadline: 'Next 14 days',
                     },
                     {
-                      title: "Document Timeline Review",
-                      priority: "Low",
-                      description: "Review and verify all dates in the incident timeline.",
-                      deadline: "Next 30 days"
-                    }
+                      title: 'Document Timeline Review',
+                      priority: 'Low',
+                      description: 'Review and verify all dates in the incident timeline.',
+                      deadline: 'Next 30 days',
+                    },
                   ].map((rec, index) => (
                     <div key={index} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50">
                       <Target className="h-5 w-5 text-primary mt-1" />
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <h4 className="font-medium">{rec.title}</h4>
-                          <span className={`text-xs px-2 py-1 rounded-full ${
-                            rec.priority === 'High' ? 'bg-red-100 text-red-700' :
-                            rec.priority === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
-                            'bg-green-100 text-green-700'
-                          }`}>
+                          <span
+                            className={`text-xs px-2 py-1 rounded-full ${
+                              rec.priority === 'High'
+                                ? 'bg-red-100 text-red-700'
+                                : rec.priority === 'Medium'
+                                  ? 'bg-yellow-100 text-yellow-700'
+                                  : 'bg-green-100 text-green-700'
+                            }`}
+                          >
                             {rec.priority} Priority
                           </span>
                         </div>
@@ -256,34 +301,38 @@ export default function AnalysisOverview() {
                 <div className="space-y-4">
                   {[
                     {
-                      metric: "Document Collection",
-                      status: "Improving",
-                      change: "+15%",
-                      description: "Increased rate of document processing and analysis"
+                      metric: 'Document Collection',
+                      status: 'Improving',
+                      change: '+15%',
+                      description: 'Increased rate of document processing and analysis',
                     },
                     {
-                      metric: "Evidence Strength",
-                      status: "Stable",
-                      change: "0%",
-                      description: "Consistent quality of evidence maintained"
+                      metric: 'Evidence Strength',
+                      status: 'Stable',
+                      change: '0%',
+                      description: 'Consistent quality of evidence maintained',
                     },
                     {
-                      metric: "Timeline Clarity",
-                      status: "Improving",
-                      change: "+25%",
-                      description: "Better chronological organization of events"
-                    }
+                      metric: 'Timeline Clarity',
+                      status: 'Improving',
+                      change: '+25%',
+                      description: 'Better chronological organization of events',
+                    },
                   ].map((trend, index) => (
                     <div key={index} className="flex items-start gap-4 p-4 rounded-lg bg-muted/50">
                       <TrendingUp className="h-5 w-5 text-primary mt-1" />
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <h4 className="font-medium">{trend.metric}</h4>
-                          <span className={`text-xs px-2 py-1 rounded-full ${
-                            trend.status === 'Improving' ? 'bg-green-100 text-green-700' :
-                            trend.status === 'Declining' ? 'bg-red-100 text-red-700' :
-                            'bg-yellow-100 text-yellow-700'
-                          }`}>
+                          <span
+                            className={`text-xs px-2 py-1 rounded-full ${
+                              trend.status === 'Improving'
+                                ? 'bg-green-100 text-green-700'
+                                : trend.status === 'Declining'
+                                  ? 'bg-red-100 text-red-700'
+                                  : 'bg-yellow-100 text-yellow-700'
+                            }`}
+                          >
                             {trend.change}
                           </span>
                         </div>
@@ -299,4 +348,4 @@ export default function AnalysisOverview() {
       </div>
     </div>
   );
-} 
+}

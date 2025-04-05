@@ -1,8 +1,8 @@
 'use client';
 
-import { Lead, useStore } from "@/lib/store";
-import { useTRPC } from "@/trpc/client";
-import { useQuery } from "@tanstack/react-query";
+import { Lead, useStore } from '@/lib/store';
+import { useTRPC } from '@/trpc/client';
+import { useQuery } from '@tanstack/react-query';
 import {
   Column,
   ColumnDef,
@@ -18,8 +18,8 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { Button } from "@workspace/ui/components/button";
+} from '@tanstack/react-table';
+import { Button } from '@workspace/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,8 +27,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@workspace/ui/components/dropdown-menu";
-import { Input } from "@workspace/ui/components/input";
+} from '@workspace/ui/components/dropdown-menu';
+import { Input } from '@workspace/ui/components/input';
 import {
   Table,
   TableBody,
@@ -36,62 +36,62 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@workspace/ui/components/table";
-import { ArrowUpDown, MoreHorizontal, UserPlus } from "lucide-react";
-import { useState } from "react";
+} from '@workspace/ui/components/table';
+import { ArrowUpDown, MoreHorizontal, UserPlus } from 'lucide-react';
+import { useState } from 'react';
 
 const columns: ColumnDef<Lead>[] = [
   {
-    accessorKey: "name",
+    accessorKey: 'name',
     header: ({ column }: { column: Column<Lead> }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: 'email',
+    header: 'Email',
   },
   {
-    accessorKey: "phone",
-    header: "Phone",
+    accessorKey: 'phone',
+    header: 'Phone',
   },
   {
-    accessorKey: "incidentType",
-    header: "Incident Type",
+    accessorKey: 'incidentType',
+    header: 'Incident Type',
   },
   {
-    accessorKey: "incidentDate",
-    header: "Incident Date",
+    accessorKey: 'incidentDate',
+    header: 'Incident Date',
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: 'status',
+    header: 'Status',
     cell: ({ row }: { row: Row<Lead> }) => {
-      const status = row.getValue("status") as string
+      const status = row.getValue('status') as string;
       return (
         <div className="flex items-center">
           <span className={getStatusColor(status)}>{status}</span>
         </div>
-      )
+      );
     },
   },
   {
-    accessorKey: "createdAt",
-    header: "Created At",
+    accessorKey: 'createdAt',
+    header: 'Created At',
   },
   {
-    id: "actions",
+    id: 'actions',
     cell: ({ row }: { row: Row<Lead> }) => {
-      const lead = row.original
-      const { setSelectedLeadId } = useStore()
+      const lead = row.original;
+      const { setSelectedLeadId } = useStore();
 
       return (
         <DropdownMenu>
@@ -103,9 +103,7 @@ const columns: ColumnDef<Lead>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(lead.email)}
-            >
+            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(lead.email)}>
               Copy email
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -116,35 +114,35 @@ const columns: ColumnDef<Lead>[] = [
             <DropdownMenuItem>Convert to case</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
 function getStatusColor(status: string) {
   switch (status.toLowerCase()) {
-    case "new":
-      return "text-blue-600 bg-blue-50 px-2 py-1 rounded-full text-xs font-medium"
-    case "contacted":
-      return "text-yellow-600 bg-yellow-50 px-2 py-1 rounded-full text-xs font-medium"
-    case "qualified":
-      return "text-green-600 bg-green-50 px-2 py-1 rounded-full text-xs font-medium"
-    case "converted":
-      return "text-purple-600 bg-purple-50 px-2 py-1 rounded-full text-xs font-medium"
-    case "lost":
-      return "text-red-600 bg-red-50 px-2 py-1 rounded-full text-xs font-medium"
+    case 'new':
+      return 'text-blue-600 bg-blue-50 px-2 py-1 rounded-full text-xs font-medium';
+    case 'contacted':
+      return 'text-yellow-600 bg-yellow-50 px-2 py-1 rounded-full text-xs font-medium';
+    case 'qualified':
+      return 'text-green-600 bg-green-50 px-2 py-1 rounded-full text-xs font-medium';
+    case 'converted':
+      return 'text-purple-600 bg-purple-50 px-2 py-1 rounded-full text-xs font-medium';
+    case 'lost':
+      return 'text-red-600 bg-red-50 px-2 py-1 rounded-full text-xs font-medium';
     default:
-      return "text-gray-600 bg-gray-50 px-2 py-1 rounded-full text-xs font-medium"
+      return 'text-gray-600 bg-gray-50 px-2 py-1 rounded-full text-xs font-medium';
   }
 }
 
 export function LeadsDataTable() {
   const trpc = useTRPC();
   const { leadFilters, setLeadFilters } = useStore();
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const { data: leads } = useQuery(
     trpc.leads.getAll.queryOptions({
@@ -170,7 +168,7 @@ export function LeadsDataTable() {
       columnVisibility,
       rowSelection,
     },
-  })
+  });
 
   return (
     <div className="space-y-4">
@@ -178,9 +176,7 @@ export function LeadsDataTable() {
         <Input
           placeholder="Filter by name..."
           value={leadFilters.search}
-          onChange={(event) =>
-            setLeadFilters({ ...leadFilters, search: event.target.value })
-          }
+          onChange={(event) => setLeadFilters({ ...leadFilters, search: event.target.value })}
           className="max-w-sm"
         />
         <Button>
@@ -198,12 +194,9 @@ export function LeadsDataTable() {
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -211,26 +204,17 @@ export function LeadsDataTable() {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row: Row<Lead>) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   No leads found.
                 </TableCell>
               </TableRow>
@@ -240,4 +224,4 @@ export function LeadsDataTable() {
       </div>
     </div>
   );
-} 
+}

@@ -1,7 +1,7 @@
-"use client"
+'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from "@workspace/ui/components/avatar"
-import { Button } from "@workspace/ui/components/button"
+import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
+import { Button } from '@workspace/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,19 +10,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@workspace/ui/components/dropdown-menu"
-import { ChevronUp, LogOut, Settings, User } from "lucide-react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+} from '@workspace/ui/components/dropdown-menu';
+import { ChevronUp, LogOut, Settings, User } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export function UserDropdown() {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           className="relative flex items-center gap-2 h-10 w-full px-3 border rounded-md hover:bg-accent"
         >
           <Avatar className="h-6 w-6">
@@ -33,18 +33,16 @@ export function UserDropdown() {
           <ChevronUp className="h-4 w-4 text-muted-foreground" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent 
-        className="w-[var(--trigger-width)] min-w-[200px]" 
-        align="center" 
-        side="top" 
+      <DropdownMenuContent
+        className="w-[var(--trigger-width)] min-w-[200px]"
+        align="center"
+        side="top"
         sideOffset={8}
       >
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">John Doe</p>
-            <p className="text-xs leading-none text-muted-foreground">
-              john@example.com
-            </p>
+            <p className="text-xs leading-none text-muted-foreground">john@example.com</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -67,7 +65,7 @@ export function UserDropdown() {
           className="cursor-pointer text-red-600 focus:text-red-600"
           onClick={() => {
             // TODO: Implement logout
-            console.log("Logout")
+            console.log('Logout');
           }}
         >
           <LogOut className="mr-2 h-4 w-4" />
@@ -75,5 +73,5 @@ export function UserDropdown() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-} 
+  );
+}

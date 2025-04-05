@@ -1,31 +1,20 @@
 'use client';
 
-import { MetricCard } from "@/components/dashboard/metric-card";
-import { RecentCases } from "@/components/dashboard/recent-cases";
-import { UpcomingDeadlines } from "@/components/dashboard/upcoming-deadlines";
-import { useTRPC } from "@/trpc/client";
-import { useQuery } from "@tanstack/react-query";
-import { Card } from "@workspace/ui/components/card";
-import {
-  BarChart,
-  Briefcase,
-  Calendar,
-  FileText,
-  Scale,
-  TrendingUp,
-} from "lucide-react";
+import { MetricCard } from '@/components/dashboard/metric-card';
+import { RecentCases } from '@/components/dashboard/recent-cases';
+import { UpcomingDeadlines } from '@/components/dashboard/upcoming-deadlines';
+import { useTRPC } from '@/trpc/client';
+import { useQuery } from '@tanstack/react-query';
+import { Card } from '@workspace/ui/components/card';
+import { BarChart, Briefcase, Calendar, FileText, Scale, TrendingUp } from 'lucide-react';
 
 export default function DashboardPage() {
   const trpc = useTRPC();
-  
+
   const { data: metrics } = useQuery(trpc.dashboard.getMetrics.queryOptions());
   const { data: recentCases } = useQuery(trpc.dashboard.getRecentCases.queryOptions());
-  const { data: upcomingDeadlines } = useQuery(
-    trpc.dashboard.getUpcomingDeadlines.queryOptions()
-  );
-  const { data: casesByStatus } = useQuery(
-    trpc.dashboard.getCasesByStatus.queryOptions()
-  );
+  const { data: upcomingDeadlines } = useQuery(trpc.dashboard.getUpcomingDeadlines.queryOptions());
+  const { data: casesByStatus } = useQuery(trpc.dashboard.getCasesByStatus.queryOptions());
 
   return (
     <div className="min-h-screen w-full">
@@ -33,9 +22,7 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-            <p className="text-muted-foreground">
-              Welcome back! Here's an overview of your cases
-            </p>
+            <p className="text-muted-foreground">Welcome back! Here's an overview of your cases</p>
           </div>
         </div>
 
@@ -79,21 +66,22 @@ export default function DashboardPage() {
                 <BarChart className="h-4 w-4 text-muted-foreground" />
               </div>
               <div className="mt-6 flex-1 space-y-2">
-                {casesByStatus && Object.entries(casesByStatus).map(([status, count]) => (
-                  <div key={status} className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-primary" />
-                    <div className="flex-1 text-sm font-medium">{status}</div>
-                    <div className="text-sm text-muted-foreground">{count} cases</div>
-                    <div className="w-[30%] rounded-full bg-muted">
-                      <div
-                        className="h-2 rounded-full bg-primary"
-                        style={{
-                          width: `${(count / Object.values(casesByStatus).reduce((a, b) => a + b, 0)) * 100}%`,
-                        }}
-                      />
+                {casesByStatus &&
+                  Object.entries(casesByStatus).map(([status, count]) => (
+                    <div key={status} className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-primary" />
+                      <div className="flex-1 text-sm font-medium">{status}</div>
+                      <div className="text-sm text-muted-foreground">{count} cases</div>
+                      <div className="w-[30%] rounded-full bg-muted">
+                        <div
+                          className="h-2 rounded-full bg-primary"
+                          style={{
+                            width: `${(count / Object.values(casesByStatus).reduce((a, b) => a + b, 0)) * 100}%`,
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </Card>
@@ -103,9 +91,7 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <h3 className="text-xl font-semibold">Performance</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Case resolution metrics
-                  </p>
+                  <p className="text-sm text-muted-foreground">Case resolution metrics</p>
                 </div>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </div>
@@ -143,4 +129,4 @@ export default function DashboardPage() {
       </div>
     </div>
   );
-} 
+}

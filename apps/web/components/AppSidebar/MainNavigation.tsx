@@ -1,12 +1,7 @@
 'use client';
 
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@workspace/ui/components/sidebar';
-import {
-    Calendar,
-    LayoutDashboard,
-    Scale,
-    Users,
-} from 'lucide-react';
+import { Calendar, LayoutDashboard, Scale, Users } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -47,16 +42,10 @@ export function MainNavigation() {
     return (
       <SidebarMenuItem key={item.id}>
         <Link href={item.href} passHref legacyBehavior>
-          <SidebarMenuButton
-            asChild
-            size="md"
-            className={isActive ? "bg-accent/50" : undefined}
-          >
+          <SidebarMenuButton asChild size="md" className={isActive ? 'bg-accent/50' : undefined}>
             <div className="flex items-center">
               <Icon className="size-4 text-muted-foreground" />
-              <span className="ml-2 truncate text-sm">
-                {item.name}
-              </span>
+              <span className="ml-2 truncate text-sm">{item.name}</span>
             </div>
           </SidebarMenuButton>
         </Link>
@@ -64,9 +53,5 @@ export function MainNavigation() {
     );
   };
 
-  return (
-    <SidebarMenu>
-      {mainNavigationConfig.map(renderNavigationItem)}
-    </SidebarMenu>
-  );
-} 
+  return <SidebarMenu>{mainNavigationConfig.map(renderNavigationItem)}</SidebarMenu>;
+}

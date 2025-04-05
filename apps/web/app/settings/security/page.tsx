@@ -1,68 +1,84 @@
-"use client"
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@workspace/ui/components/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@workspace/ui/components/form"
-import { Input } from "@workspace/ui/components/input"
-import { Check } from "lucide-react"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@workspace/ui/components/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@workspace/ui/components/card';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@workspace/ui/components/form';
+import { Input } from '@workspace/ui/components/input';
+import { Check } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-const passwordSchema = z.object({
-  currentPassword: z.string().min(1, "Current password is required"),
-  newPassword: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number")
-    .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
-  confirmPassword: z.string(),
-}).refine((data) => data.newPassword === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-})
+const passwordSchema = z
+  .object({
+    currentPassword: z.string().min(1, 'Current password is required'),
+    newPassword: z
+      .string()
+      .min(8, 'Password must be at least 8 characters')
+      .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .regex(/[0-9]/, 'Password must contain at least one number')
+      .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  });
 
-type PasswordFormValues = z.infer<typeof passwordSchema>
+type PasswordFormValues = z.infer<typeof passwordSchema>;
 
 const activeSessions = [
   {
-    device: "MacBook Pro",
-    location: "San Francisco, CA",
-    lastActive: "2 minutes ago",
-    browser: "Chrome",
+    device: 'MacBook Pro',
+    location: 'San Francisco, CA',
+    lastActive: '2 minutes ago',
+    browser: 'Chrome',
     current: true,
   },
   {
-    device: "iPhone 13",
-    location: "San Francisco, CA",
-    lastActive: "1 hour ago",
-    browser: "Safari",
+    device: 'iPhone 13',
+    location: 'San Francisco, CA',
+    lastActive: '1 hour ago',
+    browser: 'Safari',
     current: false,
   },
   {
-    device: "iPad Pro",
-    location: "San Francisco, CA",
-    lastActive: "2 days ago",
-    browser: "Safari",
+    device: 'iPad Pro',
+    location: 'San Francisco, CA',
+    lastActive: '2 days ago',
+    browser: 'Safari',
     current: false,
   },
-]
+];
 
 export default function SecurityPage() {
   const form = useForm<PasswordFormValues>({
     resolver: zodResolver(passwordSchema),
     defaultValues: {
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
     },
-  })
+  });
 
   function onSubmit(data: PasswordFormValues) {
     // TODO: Implement password change
-    console.log(data)
+    console.log(data);
   }
 
   return (
@@ -70,9 +86,7 @@ export default function SecurityPage() {
       <Card>
         <CardHeader>
           <CardTitle>Change Password</CardTitle>
-          <CardDescription>
-            Update your password to keep your account secure.
-          </CardDescription>
+          <CardDescription>Update your password to keep your account secure.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -129,9 +143,7 @@ export default function SecurityPage() {
       <Card>
         <CardHeader>
           <CardTitle>Two-Factor Authentication</CardTitle>
-          <CardDescription>
-            Add an extra layer of security to your account.
-          </CardDescription>
+          <CardDescription>Add an extra layer of security to your account.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between space-x-4 rounded-lg border p-4">
@@ -152,7 +164,7 @@ export default function SecurityPage() {
               size="sm"
               onClick={() => {
                 // TODO: Implement 2FA configuration
-                console.log("Configure Authenticator App")
+                console.log('Configure Authenticator App');
               }}
             >
               Configure
@@ -161,16 +173,14 @@ export default function SecurityPage() {
           <div className="flex items-center justify-between space-x-4 rounded-lg border p-4">
             <div className="space-y-1">
               <h4 className="text-sm font-medium">SMS Authentication</h4>
-              <p className="text-sm text-muted-foreground">
-                Receive one-time codes via SMS.
-              </p>
+              <p className="text-sm text-muted-foreground">Receive one-time codes via SMS.</p>
             </div>
             <Button
               variant="outline"
               size="sm"
               onClick={() => {
                 // TODO: Implement SMS 2FA configuration
-                console.log("Configure SMS Authentication")
+                console.log('Configure SMS Authentication');
               }}
             >
               Configure
@@ -182,9 +192,7 @@ export default function SecurityPage() {
       <Card>
         <CardHeader>
           <CardTitle>Active Sessions</CardTitle>
-          <CardDescription>
-            Manage your active sessions across different devices.
-          </CardDescription>
+          <CardDescription>Manage your active sessions across different devices.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {activeSessions.map((session, index) => (
@@ -212,7 +220,7 @@ export default function SecurityPage() {
                   className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-600"
                   onClick={() => {
                     // TODO: Implement session termination
-                    console.log(`Terminate session for ${session.device}`)
+                    console.log(`Terminate session for ${session.device}`);
                   }}
                 >
                   Terminate
@@ -223,5 +231,5 @@ export default function SecurityPage() {
         </CardContent>
       </Card>
     </div>
-  )
-} 
+  );
+}

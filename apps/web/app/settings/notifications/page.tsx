@@ -1,42 +1,54 @@
-"use client"
+'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card"
-import { Label } from "@workspace/ui/components/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@workspace/ui/components/select"
-import { Switch } from "@workspace/ui/components/switch"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@workspace/ui/components/card';
+import { Label } from '@workspace/ui/components/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@workspace/ui/components/select';
+import { Switch } from '@workspace/ui/components/switch';
 
 const notificationSettings = [
   {
-    id: "case-updates",
-    title: "Case Updates",
-    description: "Get notified when there are updates to your cases",
+    id: 'case-updates',
+    title: 'Case Updates',
+    description: 'Get notified when there are updates to your cases',
     enabled: true,
   },
   {
-    id: "deadlines",
-    title: "Deadlines",
-    description: "Receive reminders for upcoming deadlines and court dates",
+    id: 'deadlines',
+    title: 'Deadlines',
+    description: 'Receive reminders for upcoming deadlines and court dates',
     enabled: true,
   },
   {
-    id: "document-updates",
-    title: "Document Updates",
-    description: "Get notified when documents are added or modified",
+    id: 'document-updates',
+    title: 'Document Updates',
+    description: 'Get notified when documents are added or modified',
     enabled: true,
   },
   {
-    id: "client-messages",
-    title: "Client Messages",
-    description: "Receive notifications for new client messages",
+    id: 'client-messages',
+    title: 'Client Messages',
+    description: 'Receive notifications for new client messages',
     enabled: true,
   },
   {
-    id: "team-updates",
-    title: "Team Updates",
-    description: "Get notified about team member activities and updates",
+    id: 'team-updates',
+    title: 'Team Updates',
+    description: 'Get notified about team member activities and updates',
     enabled: false,
   },
-]
+];
 
 export default function NotificationsPage() {
   return (
@@ -90,16 +102,14 @@ export default function NotificationsPage() {
                   <Label htmlFor={setting.id} className="text-sm font-medium">
                     {setting.title}
                   </Label>
-                  <p className="text-sm text-muted-foreground">
-                    {setting.description}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{setting.description}</p>
                 </div>
                 <Switch
                   id={setting.id}
                   checked={setting.enabled}
                   onCheckedChange={() => {
                     // TODO: Implement notification toggle
-                    console.log(`Toggle ${setting.title}`)
+                    console.log(`Toggle ${setting.title}`);
                   }}
                 />
               </div>
@@ -108,5 +118,5 @@ export default function NotificationsPage() {
         </CardContent>
       </Card>
     </div>
-  )
-} 
+  );
+}

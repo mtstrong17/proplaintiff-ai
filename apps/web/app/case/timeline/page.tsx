@@ -1,4 +1,4 @@
-import { CaseTimeline } from "./components/case-timeline"
+import { CaseTimeline } from './components/case-timeline';
 
 export default function TimelinePage() {
   return (
@@ -13,5 +13,5 @@ export default function TimelinePage() {
         <CaseTimeline />
       </div>
     </div>
-  )
-} 
+  );
+}
