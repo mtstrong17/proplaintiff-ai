@@ -16,6 +16,7 @@ import {
   FileText,
   Lightbulb,
   LucideIcon,
+  Mail,
   Scale,
   Sparkles,
   Target,
@@ -54,6 +55,12 @@ const caseNavigationConfig: NavigationItem[] = [
     name: 'Documents',
     href: '/case/documents',
     icon: FileText,
+  },
+  {
+    id: 'case-demand-letter',
+    name: 'Demand Letter',
+    href: '/case/demand-letter',
+    icon: Mail,
   },
   {
     id: 'case-tasks',
