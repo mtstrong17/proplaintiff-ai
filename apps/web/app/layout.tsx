@@ -1,3 +1,5 @@
+import { ChatProvider } from '@/components/chat/chat-provider';
+import { FloatingChat } from '@/components/chat/floating-chat';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import AppSidebar from '@/components/AppSidebar';
@@ -34,8 +36,11 @@ export default async function RootLayout({
         <Providers>
           <HydrationBoundary state={dehydrate(queryClient)}>
             <SidebarProvider>
-              <AppSidebar />
-              {children}
+              <ChatProvider>
+                <AppSidebar />
+                {children}
+                <FloatingChat />
+              </ChatProvider>
             </SidebarProvider>
           </HydrationBoundary>
         </Providers>
