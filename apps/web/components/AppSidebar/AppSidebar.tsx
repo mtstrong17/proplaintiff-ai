@@ -3,6 +3,7 @@
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarHeader
@@ -11,6 +12,7 @@ import { CaseNavigation } from './CaseNavigation';
 import { CaseSearch } from './CaseSearch';
 import { MainNavigation } from './MainNavigation';
 import OrganizationSwitcher from './OrganizationSwitcher';
+import { UserDropdown } from './UserDropdown';
 
 export default function AppSidebar() {
   return (
@@ -34,6 +36,9 @@ export default function AppSidebar() {
           <CaseNavigation />
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <UserDropdown />
+      </SidebarFooter>
     </Sidebar>
   );
 }
