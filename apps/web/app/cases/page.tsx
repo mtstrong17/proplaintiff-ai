@@ -3,7 +3,7 @@
 import { StatusBadge } from '@/components/status-badge';
 import { useStore } from '@/lib/store';
 import { useTRPC } from '@/trpc/client';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button } from '@workspace/ui/components/button';
 import {
   DropdownMenu,
@@ -37,6 +37,8 @@ export default function CasesPage() {
 
   const { data: statuses } = useQuery(trpc.cases.getStatuses.queryOptions());
 
+  const deleteMutation = useMutation(trpc.cases.delete.mutationOptions());
+
   const handleViewCase = (caseId: string) => {
     setSelectedCaseId(caseId);
     router.push('/case/overview');
@@ -45,7 +47,7 @@ export default function CasesPage() {
   const handleDeleteCase = async (caseId: string) => {
     // TODO: Add confirmation dialog
     try {
-      await trpc.cases.delete.mutate({ id: caseId });
+      await deleteMutation.mutateAsync({ id: caseId });
       if (selectedCaseId === caseId) {
         setSelectedCaseId(null);
       }

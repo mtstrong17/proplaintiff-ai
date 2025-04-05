@@ -1,6 +1,18 @@
 import { z } from 'zod';
 import { publicProcedure, router } from '../trpc.js';
 
+// Define the Case type to match the frontend
+const Case = z.object({
+  id: z.string(),
+  client: z.string(),
+  type: z.string(),
+  status: z.string(),
+  filingDate: z.string(),
+  nextHearing: z.string().nullable(),
+  assignedAttorney: z.string(),
+  lastActivity: z.string(),
+});
+
 // Sample data - In a real app, this would come from your database
 const SAMPLE_CASES = [
   {
@@ -11,9 +23,7 @@ const SAMPLE_CASES = [
     filingDate: '2024-03-15',
     nextHearing: '2024-04-20',
     assignedAttorney: 'Sarah Wilson',
-    insuranceProvider: 'State Farm',
     lastActivity: 'Medical records requested',
-    lastUpdated: '2024-04-04',
   },
   {
     id: 'CASE-002',
@@ -23,9 +33,7 @@ const SAMPLE_CASES = [
     filingDate: '2024-02-28',
     nextHearing: '2024-05-10',
     assignedAttorney: 'Michael Brown',
-    insuranceProvider: 'Allstate',
     lastActivity: 'Deposition scheduled',
-    lastUpdated: '2024-04-03',
   },
   {
     id: 'CASE-003',
@@ -35,9 +43,7 @@ const SAMPLE_CASES = [
     filingDate: '2024-01-20',
     nextHearing: null,
     assignedAttorney: 'Emily Davis',
-    insuranceProvider: 'Progressive',
     lastActivity: 'Settlement offer received',
-    lastUpdated: '2024-04-02',
   },
 ];
 
@@ -51,6 +57,7 @@ export const casesRouter = router({
         })
         .optional()
     )
+    .output(z.array(Case))
     .query(({ input }) => {
       let filteredCases = [...SAMPLE_CASES];
 
@@ -73,11 +80,23 @@ export const casesRouter = router({
       return filteredCases;
     }),
 
-  getById: publicProcedure.input(z.string()).query(({ input }) => {
-    return SAMPLE_CASES.find((case_) => case_.id === input);
+  getById: publicProcedure
+    .input(z.string())
+    .output(Case.nullable())
+    .query(({ input }) => {
+      return SAMPLE_CASES.find((case_) => case_.id === input) || null;
+    }),
+
+  getStatuses: publicProcedure.output(z.array(z.string())).query(() => {
+    return ['Active', 'Discovery', 'Settlement', 'Closed'];
   }),
 
-  getStatuses: publicProcedure.query(() => {
-    return ['Active', 'Discovery', 'Settlement', 'Closed'];
+  delete: publicProcedure.input(z.object({ id: z.string() })).mutation(({ input }) => {
+    const index = SAMPLE_CASES.findIndex((case_) => case_.id === input.id);
+    if (index !== -1) {
+      SAMPLE_CASES.splice(index, 1);
+      return { success: true };
+    }
+    throw new Error('Case not found');
   }),
 });

@@ -1,22 +1,50 @@
 import dayjs from 'dayjs';
 import { z } from 'zod';
 import { publicProcedure, router } from '../trpc.js';
+
+// Define the Case type to match the frontend
+const Case = z.object({
+  id: z.string(),
+  client: z.string(),
+  type: z.string(),
+  status: z.string(),
+  filingDate: z.string(),
+  nextHearing: z.string().nullable(),
+  assignedAttorney: z.string(),
+  lastActivity: z.string(),
+});
+
 // Sample data - In a real app, this would come from your database
 const SAMPLE_CASES = [
-  { id: 1, client: 'John Doe', type: 'Auto Accident', status: 'Active', lastUpdated: '2024-04-04' },
   {
-    id: 2,
+    id: 'CASE-001',
+    client: 'John Doe',
+    type: 'Auto Accident',
+    status: 'Active',
+    filingDate: '2024-03-15',
+    nextHearing: '2024-04-20',
+    assignedAttorney: 'Sarah Wilson',
+    lastActivity: 'Medical records requested',
+  },
+  {
+    id: 'CASE-002',
     client: 'Jane Smith',
     type: 'Slip and Fall',
     status: 'Discovery',
-    lastUpdated: '2024-04-03',
+    filingDate: '2024-02-28',
+    nextHearing: '2024-05-10',
+    assignedAttorney: 'Michael Brown',
+    lastActivity: 'Deposition scheduled',
   },
   {
-    id: 3,
+    id: 'CASE-003',
     client: 'Bob Johnson',
     type: 'Medical Malpractice',
     status: 'Settlement',
-    lastUpdated: '2024-04-02',
+    filingDate: '2024-01-20',
+    nextHearing: null,
+    assignedAttorney: 'Emily Davis',
+    lastActivity: 'Settlement offer received',
   },
 ];
 
@@ -28,15 +56,24 @@ const SAMPLE_METRICS = {
 };
 
 export const dashboardRouter = router({
-  getMetrics: publicProcedure.query(() => {
-    return SAMPLE_METRICS;
-  }),
+  getMetrics: publicProcedure
+    .output(
+      z.object({
+        activeCases: z.number(),
+        pendingSettlements: z.number(),
+        documentsToReview: z.number(),
+        upcomingDeadlines: z.number(),
+      })
+    )
+    .query(() => {
+      return SAMPLE_METRICS;
+    }),
 
-  getRecentCases: publicProcedure.query(() => {
+  getRecentCases: publicProcedure.output(z.array(Case)).query(() => {
     return SAMPLE_CASES;
   }),
 
-  getCasesByStatus: publicProcedure.query(() => {
+  getCasesByStatus: publicProcedure.output(z.record(z.string(), z.number())).query(() => {
     return {
       active: 45,
       discovery: 15,
