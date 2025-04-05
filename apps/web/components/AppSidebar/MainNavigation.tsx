@@ -5,6 +5,7 @@ import {
     Calendar,
     LayoutDashboard,
     Scale,
+    Users,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -21,6 +22,12 @@ const navigationConfig = [
     name: 'Cases',
     href: '/cases',
     icon: Scale,
+  },
+  {
+    id: 'leads',
+    name: 'Leads',
+    href: '/leads',
+    icon: Users,
   },
   {
     id: 'calendar',
