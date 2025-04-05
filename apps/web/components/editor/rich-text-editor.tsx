@@ -8,15 +8,18 @@ interface RichTextEditorProps {
   className?: string;
 }
 
+
 export function RichTextEditor({ content, onChange, className }: RichTextEditorProps) {
+console.log('tiny mce', content);
   return (
     <div className={className}>
       <Editor
+        licenseKey="gpl"
         tinymceScriptSrc='/tinymce/tinymce.min.js'
-        apiKey="gpl" // You'll need to replace this with your TinyMCE API key
         value={content}
         onEditorChange={(newContent) => onChange(newContent)}
         init={{
+        
           height: 600,
           menubar: false,
           plugins: [
