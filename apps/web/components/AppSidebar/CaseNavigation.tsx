@@ -2,42 +2,56 @@
 
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@workspace/ui/components/sidebar';
 import {
-    Calendar,
-    LayoutDashboard,
-    Scale,
-    Users,
+  BarChart3,
+  ClipboardList,
+  Clock,
+  FileText,
+  MessageSquare,
+  Receipt,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const mainNavigationConfig = [
+const caseNavigationConfig = [
   {
-    id: 'dashboard',
-    name: 'Dashboard',
-    href: '/dashboard',
-    icon: LayoutDashboard,
+    id: 'case-overview',
+    name: 'Case Overview',
+    href: '/case/overview',
+    icon: BarChart3,
   },
   {
-    id: 'cases',
-    name: 'Cases',
-    href: '/cases',
-    icon: Scale,
+    id: 'case-timeline',
+    name: 'Timeline',
+    href: '/case/timeline',
+    icon: Clock,
   },
   {
-    id: 'leads',
-    name: 'Leads',
-    href: '/leads',
-    icon: Users,
+    id: 'case-documents',
+    name: 'Documents',
+    href: '/case/documents',
+    icon: FileText,
   },
   {
-    id: 'calendar',
-    name: 'Calendar',
-    href: '/calendar',
-    icon: Calendar,
+    id: 'case-tasks',
+    name: 'Tasks',
+    href: '/case/tasks',
+    icon: ClipboardList,
+  },
+  {
+    id: 'case-communications',
+    name: 'Communications',
+    href: '/case/communications',
+    icon: MessageSquare,
+  },
+  {
+    id: 'case-billing',
+    name: 'Billing',
+    href: '/case/billing',
+    icon: Receipt,
   },
 ] as const;
 
-export function MainNavigation() {
+export function CaseNavigation() {
   const pathname = usePathname();
 
   const renderNavigationItem = (item: { id: string; name: string; href: string; icon: any }) => {
@@ -66,7 +80,7 @@ export function MainNavigation() {
 
   return (
     <SidebarMenu>
-      {mainNavigationConfig.map(renderNavigationItem)}
+      {caseNavigationConfig.map(renderNavigationItem)}
     </SidebarMenu>
   );
 } 
