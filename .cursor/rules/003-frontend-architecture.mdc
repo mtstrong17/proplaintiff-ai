@@ -1,13 +1,7 @@
 ---
-name: Frontend Architecture Standards
-version: "1.0"
-description: "Standards and patterns for the Next.js frontend application"
-globs:
-  - "apps/web/**/*"
-  - "packages/ui/**/*"
-triggers:
-  - file_creation
-  - file_modification
+description: 
+globs: 
+alwaysApply: true
 ---
 
 # Frontend Architecture Standards

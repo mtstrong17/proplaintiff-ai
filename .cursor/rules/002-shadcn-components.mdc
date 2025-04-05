@@ -1,7 +1,7 @@
 ---
-description: "Standards for integrating shadcn components in the turborepo frontend"
+description: 
 globs: 
-alwaysApply: false
+alwaysApply: true
 ---
 
 # ShadCN Component Integration Standards

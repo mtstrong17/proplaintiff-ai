@@ -12,6 +12,10 @@ const sidebarNavItems = [
     href: '/settings',
   },
   {
+    title: 'Organizations',
+    href: '/settings/organizations',
+  },
+  {
     title: 'Integrations',
     href: '/settings/integrations',
   },
