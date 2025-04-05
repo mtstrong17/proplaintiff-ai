@@ -1,9 +1,7 @@
 ---
-name: ProPlaintiff Core Purpose
-version: "1.0"
-description: "Core purpose, features, and implementation guidelines for ProPlaintiff AI"
-globs: ["apps/**/*", "packages/**/*"]
-triggers: ["file_creation", "feature_implementation"]
+description: 
+globs: 
+alwaysApply: true
 ---
 
 # ProPlaintiff AI Core Purpose and Guidelines
