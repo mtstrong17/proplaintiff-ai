@@ -59,6 +59,20 @@ export const organizationRoleEnum = pgEnum('organization_role', [
   'STAFF',
 ]);
 
+export const insightSignificanceEnum = pgEnum('insight_significance', ['high', 'medium', 'low']);
+
+export const insightTypeEnum = pgEnum('insight_type', [
+  'document',
+  'testimony',
+  'legal',
+  'evidence',
+  'timeline',
+]);
+
+export const riskSeverityEnum = pgEnum('risk_severity', ['high', 'medium', 'low']);
+
+export const strengthStatusEnum = pgEnum('strength_status', ['strong', 'moderate', 'weak']);
+
 // Tables
 export const users = pgTable('users', {
   id: char('id', { length: 26 })
@@ -228,6 +242,140 @@ export const caseNotes = pgTable('case_notes', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+export const caseInsights = pgTable('case_insights', {
+  id: char('id', { length: 26 })
+    .primaryKey()
+    .$defaultFn(() => ulid()),
+  organizationId: char('organization_id', { length: 26 })
+    .references(() => organizations.id)
+    .notNull(),
+  caseId: char('case_id', { length: 26 })
+    .references(() => cases.id)
+    .notNull(),
+  title: varchar('title', { length: 255 }).notNull(),
+  type: insightTypeEnum('type').notNull(),
+  highlight: varchar('highlight', { length: 255 }),
+  finding: text('finding').notNull(),
+  significance: insightSignificanceEnum('significance').notNull(),
+  source: varchar('source', { length: 255 }),
+  sourceDate: date('source_date'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const caseStrengthAnalysis = pgTable('case_strength_analysis', {
+  id: char('id', { length: 26 })
+    .primaryKey()
+    .$defaultFn(() => ulid()),
+  organizationId: char('organization_id', { length: 26 })
+    .references(() => organizations.id)
+    .notNull(),
+  caseId: char('case_id', { length: 26 })
+    .references(() => cases.id)
+    .notNull(),
+  category: varchar('category', { length: 100 }).notNull(),
+  overallScore: integer('overall_score').notNull(),
+  details: json('details')
+    .$type<
+      Array<{
+        name: string;
+        score: number;
+        status: 'strong' | 'moderate' | 'weak';
+      }>
+    >()
+    .notNull(),
+  analysisDate: timestamp('analysis_date').defaultNow().notNull(),
+  nextReviewDate: timestamp('next_review_date'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const caseRisks = pgTable('case_risks', {
+  id: char('id', { length: 26 })
+    .primaryKey()
+    .$defaultFn(() => ulid()),
+  organizationId: char('organization_id', { length: 26 })
+    .references(() => organizations.id)
+    .notNull(),
+  caseId: char('case_id', { length: 26 })
+    .references(() => cases.id)
+    .notNull(),
+  name: varchar('name', { length: 255 }).notNull(),
+  description: text('description').notNull(),
+  severity: riskSeverityEnum('severity').notNull(),
+  mitigation: text('mitigation'),
+  status: varchar('status', { length: 50 }).notNull().default('active'),
+  identifiedBy: char('identified_by', { length: 26 })
+    .references(() => users.id)
+    .notNull(),
+  identifiedAt: timestamp('identified_at').defaultNow().notNull(),
+  resolvedAt: timestamp('resolved_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const caseStrategy = pgTable('case_strategy', {
+  id: char('id', { length: 26 })
+    .primaryKey()
+    .$defaultFn(() => ulid()),
+  organizationId: char('organization_id', { length: 26 })
+    .references(() => organizations.id)
+    .notNull(),
+  caseId: char('case_id', { length: 26 })
+    .references(() => cases.id)
+    .notNull(),
+  type: varchar('type', { length: 50 }).notNull(), // e.g., 'negotiation', 'litigation'
+  strengths: json('strengths')
+    .$type<
+      Array<{
+        point: string;
+        details: string;
+        impact: 'high' | 'medium' | 'low';
+      }>
+    >()
+    .notNull(),
+  approach: json('approach')
+    .$type<
+      Array<{
+        phase: string;
+        strategy: string;
+        timing: string;
+      }>
+    >()
+    .notNull(),
+  recommendedSettlementRange: json('recommended_settlement_range').$type<{
+    min: number;
+    max: number;
+    confidence: number;
+  }>(),
+  createdBy: char('created_by', { length: 26 })
+    .references(() => users.id)
+    .notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const precedentCases = pgTable('precedent_cases', {
+  id: char('id', { length: 26 })
+    .primaryKey()
+    .$defaultFn(() => ulid()),
+  organizationId: char('organization_id', { length: 26 })
+    .references(() => organizations.id)
+    .notNull(),
+  caseId: char('case_id', { length: 26 })
+    .references(() => cases.id)
+    .notNull(),
+  title: varchar('title', { length: 255 }).notNull(),
+  citation: varchar('citation', { length: 255 }).notNull(),
+  jurisdiction: varchar('jurisdiction', { length: 100 }).notNull(),
+  outcome: text('outcome').notNull(),
+  relevance: insightSignificanceEnum('relevance').notNull(),
+  keyFactors: json('key_factors').$type<string[]>().notNull(),
+  settlementAmount: decimal('settlement_amount', { precision: 10, scale: 2 }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   organizations: many(organizationMembers),
@@ -289,6 +437,11 @@ export const casesRelations = relations(cases, ({ one, many }) => ({
   tasks: many(tasks),
   events: many(events),
   notes: many(caseNotes),
+  insights: many(caseInsights),
+  strengthAnalysis: many(caseStrengthAnalysis),
+  risks: many(caseRisks),
+  strategies: many(caseStrategy),
+  precedents: many(precedentCases),
 }));
 
 export const documentsRelations = relations(documents, ({ one }) => ({
@@ -352,5 +505,68 @@ export const caseNotesRelations = relations(caseNotes, ({ one }) => ({
   creator: one(users, {
     fields: [caseNotes.createdBy],
     references: [users.id],
+  }),
+}));
+
+export const caseInsightsRelations = relations(caseInsights, ({ one }) => ({
+  organization: one(organizations, {
+    fields: [caseInsights.organizationId],
+    references: [organizations.id],
+  }),
+  case: one(cases, {
+    fields: [caseInsights.caseId],
+    references: [cases.id],
+  }),
+}));
+
+export const caseStrengthAnalysisRelations = relations(caseStrengthAnalysis, ({ one }) => ({
+  organization: one(organizations, {
+    fields: [caseStrengthAnalysis.organizationId],
+    references: [organizations.id],
+  }),
+  case: one(cases, {
+    fields: [caseStrengthAnalysis.caseId],
+    references: [cases.id],
+  }),
+}));
+
+export const caseRisksRelations = relations(caseRisks, ({ one }) => ({
+  organization: one(organizations, {
+    fields: [caseRisks.organizationId],
+    references: [organizations.id],
+  }),
+  case: one(cases, {
+    fields: [caseRisks.caseId],
+    references: [cases.id],
+  }),
+  identifier: one(users, {
+    fields: [caseRisks.identifiedBy],
+    references: [users.id],
+  }),
+}));
+
+export const caseStrategyRelations = relations(caseStrategy, ({ one }) => ({
+  organization: one(organizations, {
+    fields: [caseStrategy.organizationId],
+    references: [organizations.id],
+  }),
+  case: one(cases, {
+    fields: [caseStrategy.caseId],
+    references: [cases.id],
+  }),
+  creator: one(users, {
+    fields: [caseStrategy.createdBy],
+    references: [users.id],
+  }),
+}));
+
+export const precedentCasesRelations = relations(precedentCases, ({ one }) => ({
+  organization: one(organizations, {
+    fields: [precedentCases.organizationId],
+    references: [organizations.id],
+  }),
+  case: one(cases, {
+    fields: [precedentCases.caseId],
+    references: [cases.id],
   }),
 }));
