@@ -15,7 +15,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table';
 import { Button } from '@workspace/ui/components/button';
 import {
@@ -156,7 +156,13 @@ export function LeadsDataTable() {
 
   const { data: leads = [] } = useQuery(
     trpc.leads.getAll.queryOptions({
-      status: (leadFilters.status?.toUpperCase() || undefined) as 'NEW' | 'CONTACTED' | 'QUALIFIED' | 'CONVERTED' | 'LOST' | undefined,
+      status: (leadFilters.status?.toUpperCase() || undefined) as
+        | 'NEW'
+        | 'CONTACTED'
+        | 'QUALIFIED'
+        | 'CONVERTED'
+        | 'LOST'
+        | undefined,
       search: leadFilters.search || undefined,
     })
   );
