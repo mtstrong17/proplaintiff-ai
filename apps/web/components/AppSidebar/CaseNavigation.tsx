@@ -1,25 +1,20 @@
 'use client';
 
 import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarMenuSub,
+    SidebarMenuSubButton,
+    SidebarMenuSubItem,
 } from '@workspace/ui/components/sidebar';
 import {
-  BarChart3,
-  Brain,
-  ClipboardList,
-  Clock,
-  FileText,
-  Lightbulb,
-  LucideIcon,
-  Mail,
-  Scale,
-  Sparkles,
-  Target,
+    BarChart3,
+    ClipboardList,
+    Clock,
+    FileText,
+    LucideIcon,
+    Mail
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -67,38 +62,6 @@ const caseNavigationConfig: NavigationItem[] = [
     name: 'Tasks',
     href: '/case/tasks',
     icon: ClipboardList,
-  },
-  {
-    id: 'case-analysis',
-    name: 'Analysis',
-    href: '/case/analysis',
-    icon: Brain,
-    subItems: [
-      {
-        id: 'case-analysis-overview',
-        name: 'Overview',
-        href: '/case/analysis',
-        icon: Sparkles,
-      },
-      {
-        id: 'case-analysis-strength',
-        name: 'Case Strength',
-        href: '/case/analysis/strength',
-        icon: Scale,
-      },
-      {
-        id: 'case-analysis-insights',
-        name: 'Key Insights',
-        href: '/case/analysis/insights',
-        icon: Lightbulb,
-      },
-      {
-        id: 'case-analysis-strategy',
-        name: 'Strategy Recommendations',
-        href: '/case/analysis/strategy',
-        icon: Target,
-      },
-    ],
   },
 ];
 
