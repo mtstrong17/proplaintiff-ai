@@ -3,20 +3,20 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@workspace/ui/components/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from '@workspace/ui/components/card';
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from '@workspace/ui/components/form';
 import { Input } from '@workspace/ui/components/input';
 import { Check } from 'lucide-react';
@@ -184,6 +184,57 @@ export default function SecurityPage() {
               }}
             >
               Configure
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Passkey Authentication</CardTitle>
+          <CardDescription>Use biometric authentication or security keys for secure sign-in.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between space-x-4 rounded-lg border p-4">
+            <div className="space-y-1">
+              <div className="flex items-center space-x-2">
+                <h4 className="text-sm font-medium">Passkey</h4>
+                <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-600 flex items-center gap-1">
+                  <Check className="h-3 w-3" />
+                  <span>Enabled</span>
+                </span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Use your device's biometric authentication or security key to sign in.
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                // TODO: Implement passkey configuration
+                console.log('Configure Passkey');
+              }}
+            >
+              Configure
+            </Button>
+          </div>
+          <div className="flex items-center justify-between space-x-4 rounded-lg border p-4">
+            <div className="space-y-1">
+              <h4 className="text-sm font-medium">Security Keys</h4>
+              <p className="text-sm text-muted-foreground">
+                Add additional security keys for backup authentication.
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                // TODO: Implement security key management
+                console.log('Manage Security Keys');
+              }}
+            >
+              Manage
             </Button>
           </div>
         </CardContent>

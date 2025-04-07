@@ -29,20 +29,43 @@ type Citation = {
   type: 'key-fact' | 'evidence' | 'argument' | 'reference';
 };
 
-const sampleDocument = {
+type Document = {
+  id: string;
+  name: string;
+  type: 'pdf' | 'docx' | 'txt' | 'jpg' | 'png' | 'mp4' | 'mov';
+  category: 'medical' | 'legal' | 'evidence' | 'correspondence' | 'billing';
+  dateAdded: Date;
+  lastModified: Date;
+  size: string;
+  tags: string[];
+  status: 'draft' | 'final' | 'archived';
+  url: string;
+  author?: string;
+  facility?: string;
+  summary?: string;
+  citations?: Citation[];
+  relatedDocuments?: Array<{
+    id: string;
+    name: string;
+    type: Document['type'];
+    category: Document['category'];
+  }>;
+};
+
+const sampleDocument: Document = {
   id: '1',
   name: 'Initial Medical Report.pdf',
-  type: 'PDF',
+  type: 'pdf',
   category: 'medical',
   dateAdded: new Date('2024-02-15'),
   lastModified: new Date('2024-02-15'),
   size: '2.4 MB',
   tags: ['medical', 'initial-assessment'],
   status: 'final',
+  url: '/sample-documents/initial-medical-report.pdf',
   author: 'Dr. Sarah Johnson',
   facility: 'City General Hospital',
-  summary:
-    'Initial medical assessment following motor vehicle accident. Patient presents with whiplash and contusions. Recommended treatment includes pain management and physical therapy.',
+  summary: 'Initial medical assessment following motor vehicle accident. Patient presents with whiplash and contusions. Recommended treatment includes pain management and physical therapy.',
   citations: [
     {
       id: 'c1',
@@ -71,18 +94,18 @@ const sampleDocument = {
       addedAt: new Date('2024-02-17'),
       type: 'reference',
     },
-  ] as Citation[],
+  ],
   relatedDocuments: [
     {
       id: '2',
       name: 'Follow-up Assessment.pdf',
-      type: 'PDF',
+      type: 'pdf',
       category: 'medical',
     },
     {
       id: '3',
       name: 'Physical Therapy Plan.pdf',
-      type: 'PDF',
+      type: 'pdf',
       category: 'medical',
     },
   ],
@@ -95,8 +118,113 @@ const citationTypeColors = {
   reference: 'bg-orange-50 text-orange-700 border-orange-200',
 };
 
+const documentViewers = {
+  pdf: ({ url }: { url: string }) => (
+    <div className="w-full h-[600px] border rounded-lg flex items-center justify-center bg-muted">
+      <div className="text-center space-y-2">
+        <FileText className="h-12 w-12 mx-auto text-muted-foreground" />
+        <p className="text-muted-foreground">PDF Viewer Placeholder</p>
+        <p className="text-sm text-muted-foreground">URL: {url}</p>
+      </div>
+    </div>
+  ),
+  docx: ({ url }: { url: string }) => (
+    <div className="w-full h-[600px] border rounded-lg flex items-center justify-center bg-muted">
+      <div className="text-center space-y-2">
+        <FileText className="h-12 w-12 mx-auto text-muted-foreground" />
+        <p className="text-muted-foreground">Word Document Viewer Placeholder</p>
+        <p className="text-sm text-muted-foreground">URL: {url}</p>
+      </div>
+    </div>
+  ),
+  txt: ({ url }: { url: string }) => (
+    <div className="w-full h-[600px] border rounded-lg flex items-center justify-center bg-muted">
+      <div className="text-center space-y-2">
+        <FileText className="h-12 w-12 mx-auto text-muted-foreground" />
+        <p className="text-muted-foreground">Text Viewer Placeholder</p>
+        <p className="text-sm text-muted-foreground">URL: {url}</p>
+      </div>
+    </div>
+  ),
+  jpg: ({ url }: { url: string }) => (
+    <div className="w-full h-[600px] border rounded-lg flex items-center justify-center bg-muted">
+      <div className="text-center space-y-2">
+        <img
+          src={url}
+          alt="Document"
+          className="max-w-full max-h-full object-contain"
+        />
+        <p className="text-sm text-muted-foreground">Image Viewer</p>
+      </div>
+    </div>
+  ),
+  png: ({ url }: { url: string }) => (
+    <div className="w-full h-[600px] border rounded-lg flex items-center justify-center bg-muted">
+      <div className="text-center space-y-2">
+        <img
+          src={url}
+          alt="Document"
+          className="max-w-full max-h-full object-contain"
+        />
+        <p className="text-sm text-muted-foreground">Image Viewer</p>
+      </div>
+    </div>
+  ),
+  mp4: ({ url }: { url: string }) => (
+    <div className="w-full h-[600px] border rounded-lg flex items-center justify-center bg-muted">
+      <div className="text-center space-y-2">
+        <video
+          src={url}
+          controls
+          className="max-w-full max-h-full"
+        />
+        <p className="text-sm text-muted-foreground">Video Player</p>
+      </div>
+    </div>
+  ),
+  mov: ({ url }: { url: string }) => (
+    <div className="w-full h-[600px] border rounded-lg flex items-center justify-center bg-muted">
+      <div className="text-center space-y-2">
+        <video
+          src={url}
+          controls
+          className="max-w-full max-h-full"
+        />
+        <p className="text-sm text-muted-foreground">Video Player</p>
+      </div>
+    </div>
+  ),
+};
+
+const getDocumentTabs = (type: Document['type']) => {
+  const baseTabs = ['viewer', 'summary', 'citations', 'versions', 'activity'];
+  
+  switch (type) {
+    case 'pdf':
+    case 'docx':
+    case 'txt':
+      return baseTabs;
+    case 'jpg':
+    case 'png':
+      return ['viewer', 'metadata', 'citations', 'versions', 'activity'];
+    case 'mp4':
+    case 'mov':
+      return ['viewer', 'transcript', 'metadata', 'versions', 'activity'];
+    default:
+      return baseTabs;
+  }
+};
+
 export function DocumentDetails({ documentId }: { documentId: string }) {
-  const [activeTab, setActiveTab] = useState('summary');
+  const [activeTab, setActiveTab] = useState('viewer');
+  const [document, setDocument] = useState<Document>({
+    ...sampleDocument,
+    type: 'pdf',
+    url: '/sample-documents/initial-medical-report.pdf',
+  });
+
+  const tabs = getDocumentTabs(document.type);
+  const Viewer = documentViewers[document.type];
 
   return (
     <div className="space-y-6">
@@ -137,11 +265,19 @@ export function DocumentDetails({ documentId }: { documentId: string }) {
         <div className="col-span-2">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList>
-              <TabsTrigger value="summary">Summary</TabsTrigger>
-              <TabsTrigger value="citations">Citations</TabsTrigger>
-              <TabsTrigger value="versions">Versions</TabsTrigger>
-              <TabsTrigger value="activity">Activity</TabsTrigger>
+              {tabs.map((tab) => (
+                <TabsTrigger key={tab} value={tab}>
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </TabsTrigger>
+              ))}
             </TabsList>
+
+            <TabsContent value="viewer" className="mt-4">
+              <Card className="p-4">
+                <Viewer url={document.url} />
+              </Card>
+            </TabsContent>
+
             <TabsContent value="summary" className="space-y-6">
               <Card className="p-6">
                 <h2 className="text-lg font-semibold mb-4">Document Summary</h2>
@@ -201,7 +337,7 @@ export function DocumentDetails({ documentId }: { documentId: string }) {
                   </Button>
                 </div>
                 <div className="space-y-2">
-                  {sampleDocument.relatedDocuments.map((doc) => (
+                  {sampleDocument.relatedDocuments?.map((doc) => (
                     <div
                       key={doc.id}
                       className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50"
@@ -215,6 +351,64 @@ export function DocumentDetails({ documentId }: { documentId: string }) {
                       </span>
                     </div>
                   ))}
+                </div>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="metadata" className="space-y-6">
+              <Card className="p-6">
+                <h2 className="text-lg font-semibold mb-4">Image Metadata</h2>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h3 className="text-sm font-medium mb-2">Technical Details</h3>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Resolution</span>
+                        <span className="font-medium">1920x1080</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Format</span>
+                        <span className="font-medium">{document.type.toUpperCase()}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Size</span>
+                        <span className="font-medium">{document.size}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium mb-2">Capture Details</h3>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Date Taken</span>
+                        <span className="font-medium">{document.dateAdded.toLocaleDateString()}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Device</span>
+                        <span className="font-medium">iPhone 13 Pro</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Location</span>
+                        <span className="font-medium">Intersection of Main St & 1st Ave</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="transcript" className="space-y-6">
+              <Card className="p-6">
+                <h2 className="text-lg font-semibold mb-4">Video Transcript</h2>
+                <div className="space-y-4">
+                  <div className="p-4 bg-muted rounded-lg">
+                    <p className="text-sm">
+                      [00:00] Officer: Can you tell me what happened here?<br />
+                      [00:05] Witness: Yes, I saw the red car run the red light and hit the blue car.<br />
+                      [00:12] Officer: Did you see the light change?<br />
+                      [00:15] Witness: Yes, it had been red for at least 3 seconds before the collision.
+                    </p>
+                  </div>
                 </div>
               </Card>
             </TabsContent>
@@ -234,7 +428,7 @@ export function DocumentDetails({ documentId }: { documentId: string }) {
               </div>
 
               <div className="space-y-4">
-                {sampleDocument.citations.map((citation) => (
+                {sampleDocument.citations?.map((citation) => (
                   <Card key={citation.id} className="p-4">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 space-y-2">
