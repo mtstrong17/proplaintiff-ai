@@ -9,14 +9,14 @@ import { Button } from '@workspace/ui/components/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@workspace/ui/components/card';
 import { ScrollArea } from '@workspace/ui/components/scroll-area';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from '@workspace/ui/components/select';
 import { Separator } from '@workspace/ui/components/separator';
-import { FileText, Mail, Save, Wand2 } from 'lucide-react';
+import { Download, FileText, Mail, Save, Wand2 } from 'lucide-react';
 import { useState } from 'react';
 
 const STYLE_GUIDES = [
@@ -242,6 +242,21 @@ export default function DemandLetterPage() {
                   <Button variant="outline" size="sm" onClick={handleCreateVersion}>
                     <Save className="mr-2 h-4 w-4" />
                     Save Version
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => {
+                    // Create a blob from the content
+                    const blob = new Blob([newContent], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `demand-letter-${new Date().toISOString().split('T')[0]}.html`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                  }}>
+                    <Download className="mr-2 h-4 w-4" />
+                    Download
                   </Button>
                 </div>
               </CardTitle>
