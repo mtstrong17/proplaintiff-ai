@@ -1,14 +1,7 @@
 ---
-name: API Procedures Management
-version: "1.0"
-description: "Standards and processes for adding, updating, or removing procedures in the API"
-globs:
-  - "api/src/procedures/**/*"
-  - "api/src/types/procedures.ts"
-triggers:
-  - procedure_change
-  - procedure_create
-  - procedure_delete
+description: 
+globs: 
+alwaysApply: true
 ---
 
 # API Procedures Management

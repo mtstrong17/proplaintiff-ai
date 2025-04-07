@@ -1,12 +1,7 @@
 ---
-name: API Stack Standards
-version: "1.0"
-description: "Standards and patterns for the API application stack"
-globs:
-  - "apps/api/**/*"
-triggers:
-  - file_open
-  - file_edit
+description: 
+globs: 
+alwaysApply: true
 ---
 
 # API Stack Standards and Patterns

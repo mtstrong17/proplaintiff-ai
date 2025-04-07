@@ -1,12 +1,7 @@
 ---
-name: Rule Creation Standards
-version: "1.0"
-description: "Standards for creating new Cursor rules using MDC format"
-globs:
-  - ".cursor/rules/**/*.mdc"
-triggers:
-  - rule_creation
-  - rule_update
+description: 
+globs: 
+alwaysApply: true
 ---
 
 # Rule Creation Standards

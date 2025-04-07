@@ -1,7 +1,7 @@
 ---
-description: Standards and patterns for using TRPC v11 with TanStack Query in the frontend application, including Server Components support
+description: 
 globs: 
-alwaysApply: false
+alwaysApply: true
 ---
 
 # TRPC Usage with TanStack Query and Server Components

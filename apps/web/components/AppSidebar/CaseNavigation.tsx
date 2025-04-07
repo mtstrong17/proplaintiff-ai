@@ -10,6 +10,7 @@ import {
 } from '@workspace/ui/components/sidebar';
 import {
     BarChart3,
+    Brain,
     ClipboardList,
     Clock,
     FileText,
@@ -50,6 +51,12 @@ const caseNavigationConfig: NavigationItem[] = [
     name: 'Documents',
     href: '/case/documents',
     icon: FileText,
+  },
+  {
+    id: 'case-insights',
+    name: 'AI Insights',
+    href: '/case/insights',
+    icon: Brain,
   },
   {
     id: 'case-demand-letter',
