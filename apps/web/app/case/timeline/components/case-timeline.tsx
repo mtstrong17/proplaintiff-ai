@@ -8,6 +8,7 @@ import {
     ChevronDown,
     ChevronUp,
     Clock,
+    Download,
     FileText,
     Flag,
     Heart,
@@ -279,6 +280,8 @@ export function CaseTimeline() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [timeView, setTimeView] = useState<'all' | 'past' | 'future'>('all');
   const [expandedEvents, setExpandedEvents] = useState<string[]>([]);
+  const [visibleTypes, setVisibleTypes] = useState<Set<string>>(new Set(Object.keys(eventTypeIcons)));
+  const [visibleCategories, setVisibleCategories] = useState<Set<string>>(new Set(Object.keys(categoryColors)));
   const now = new Date();
 
   const toggleType = (type: string) => {
@@ -299,6 +302,41 @@ export function CaseTimeline() {
     );
   };
 
+  const handleExport = () => {
+    // Filter events based on visible types and categories
+    const visibleEvents = sampleEvents.filter(
+      (event) => visibleTypes.has(event.type) && visibleCategories.has(event.category)
+    );
+
+    // Convert events to CSV format
+    const headers = ['Date', 'Type', 'Category', 'Title', 'Description', 'Priority', 'Status', 'Document URL'];
+    const rows = visibleEvents.map(event => [
+      event.date.toISOString().split('T')[0],
+      event.type,
+      event.category,
+      event.title,
+      event.description,
+      event.priority || 'N/A',
+      event.completed ? 'Completed' : 'Pending',
+      event.documentUrl || 'N/A'
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n');
+
+    // Create and trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `case-timeline-${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const filteredEvents = sampleEvents
     .filter((event) => {
       if (timeView === 'past') return event.date <= now;
@@ -313,6 +351,13 @@ export function CaseTimeline() {
 
   return (
     <div className="space-y-8">
+      <div className="flex items-center justify-end">
+        <Button onClick={handleExport} variant="outline" className="gap-2">
+          <Download className="h-4 w-4" />
+          Export Timeline
+        </Button>
+      </div>
+
       <Card className="p-6">
         <div className="space-y-4">
           <div className="flex items-center gap-4">
