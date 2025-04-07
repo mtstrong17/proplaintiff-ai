@@ -6,8 +6,12 @@ import { createContext } from './trpc.js';
 
 const server = fastify({
   maxParamLength: 5000,
+  logger: true,
 });
-
+server.setErrorHandler((err, req, res) => {
+  console.error(err);
+  res.status(500).send('Internal Server Error');
+});
 await server.register(cors, {
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
