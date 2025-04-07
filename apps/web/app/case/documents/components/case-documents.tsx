@@ -50,13 +50,13 @@ import {
     MoreHorizontal,
     Pencil,
     Search,
-    Share2,
     Tags,
     Trash2,
     Upload,
-    X,
+    X
 } from 'lucide-react';
 import Link from 'next/link';
+import * as React from 'react';
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
@@ -70,6 +70,15 @@ type Document = {
   size: string;
   tags: string[];
   status: 'draft' | 'final' | 'archived';
+};
+
+type Folder = {
+  id: string;
+  name: string;
+  parentId: string | null;
+  documents: string[];
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 const sampleDocuments: Document[] = [
@@ -207,6 +216,105 @@ const sampleDocuments: Document[] = [
   },
 ];
 
+const sampleFolders: Folder[] = [
+  {
+    id: 'root',
+    name: 'Case Documents',
+    parentId: null,
+    documents: [],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-01'),
+  },
+  {
+    id: 'medical',
+    name: 'Medical Records',
+    parentId: 'root',
+    documents: ['1', '4', '7', '12'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-03-25'),
+  },
+  {
+    id: 'evidence',
+    name: 'Evidence',
+    parentId: 'root',
+    documents: ['2', '6', '8', '9', '10'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-02-15'),
+  },
+  {
+    id: 'legal',
+    name: 'Legal Documents',
+    parentId: 'root',
+    documents: ['3', '5'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-04-05'),
+  },
+  {
+    id: 'correspondence',
+    name: 'Correspondence',
+    parentId: 'root',
+    documents: ['11'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-03-20'),
+  },
+  {
+    id: 'medical-reports',
+    name: 'Medical Reports',
+    parentId: 'medical',
+    documents: ['1', '12'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-03-25'),
+  },
+  {
+    id: 'medical-bills',
+    name: 'Medical Bills',
+    parentId: 'medical',
+    documents: ['4'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-03-10'),
+  },
+  {
+    id: 'medical-imaging',
+    name: 'Medical Imaging',
+    parentId: 'medical',
+    documents: ['7'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-03-05'),
+  },
+  {
+    id: 'police-reports',
+    name: 'Police Reports',
+    parentId: 'evidence',
+    documents: ['2'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-02-15'),
+  },
+  {
+    id: 'photos',
+    name: 'Photos',
+    parentId: 'evidence',
+    documents: ['6'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-02-15'),
+  },
+  {
+    id: 'videos',
+    name: 'Videos',
+    parentId: 'evidence',
+    documents: ['9', '10'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-02-15'),
+  },
+  {
+    id: 'statements',
+    name: 'Statements',
+    parentId: 'evidence',
+    documents: ['8'],
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-02-18'),
+  },
+];
+
 const categoryColors = {
   medical: 'text-rose-500 bg-rose-50',
   legal: 'text-blue-500 bg-blue-50',
@@ -223,14 +331,37 @@ type UploadingFile = {
   error?: string;
 };
 
+type ListItem = {
+  id: string;
+  name: string;
+  type: 'folder' | 'document';
+  category?: Document['category'];
+  dateAdded: Date;
+  lastModified: Date;
+  size?: string;
+  tags?: string[];
+  status?: Document['status'];
+  parentId?: string | null;
+  documents?: string[];
+};
+
 export function CaseDocuments() {
   const [selectedCategory, setSelectedCategory] = useState<Document['category'] | 'all'>('all');
-  const [selectedDocuments, setSelectedDocuments] = useState<string[]>([]);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const [newFolderDialogOpen, setNewFolderDialogOpen] = useState(false);
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<Document['status'] | 'all'>('all');
+  const [currentFolder, setCurrentFolder] = useState<string>('root');
+  const [folderPath, setFolderPath] = useState<Folder[]>([]);
+  const [folders, setFolders] = useState<Folder[]>(sampleFolders);
+  const [documents, setDocuments] = useState<Document[]>(sampleDocuments);
+  const [newFolderName, setNewFolderName] = useState('');
+  const [moveDialogOpen, setMoveDialogOpen] = useState(false);
+  const [itemToMove, setItemToMove] = useState<ListItem | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<ListItem | null>(null);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newFiles = acceptedFiles.map((file) => ({
@@ -271,29 +402,119 @@ export function CaseDocuments() {
     setUploadingFiles([]);
   };
 
-  const handleSelectDocument = (documentId: string) => {
-    setSelectedDocuments((prev) =>
-      prev.includes(documentId) ? prev.filter((id) => id !== documentId) : [...prev, documentId]
+  const handleSelectItem = (itemId: string) => {
+    setSelectedItems((prev) =>
+      prev.includes(itemId) ? prev.filter((id) => id !== itemId) : [...prev, itemId]
     );
   };
 
   const handleSelectAll = () => {
-    if (selectedDocuments.length === sampleDocuments.length) {
-      setSelectedDocuments([]);
+    const items = getListItems();
+    if (selectedItems.length === items.length) {
+      setSelectedItems([]);
     } else {
-      setSelectedDocuments(sampleDocuments.map((doc) => doc.id));
+      setSelectedItems(items.map((item) => item.id));
     }
   };
 
-  const filteredDocuments = sampleDocuments
-    .filter((doc) => selectedCategory === 'all' || doc.category === selectedCategory)
-    .filter((doc) => statusFilter === 'all' || doc.status === statusFilter)
-    .filter(
-      (doc) =>
-        searchQuery === '' ||
-        doc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        doc.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
+  const handleCreateFolder = () => {
+    if (!newFolderName.trim()) return;
+
+    const newFolder: Folder = {
+      id: Math.random().toString(36).substring(7),
+      name: newFolderName.trim(),
+      parentId: currentFolder,
+      documents: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    setFolders(prev => [...prev, newFolder]);
+    setNewFolderName('');
+    setNewFolderDialogOpen(false);
+  };
+
+  const getCurrentFolder = () => {
+    return folders.find(folder => folder.id === currentFolder);
+  };
+
+  const getFolderPath = (folderId: string) => {
+    const path: Folder[] = [];
+    let currentId = folderId;
+    
+    while (currentId) {
+      const folder = folders.find(f => f.id === currentId);
+      if (folder) {
+        path.unshift(folder);
+        currentId = folder.parentId || '';
+      } else {
+        break;
+      }
+    }
+    
+    return path;
+  };
+
+  const getSubfolders = (folderId: string) => {
+    return folders.filter(folder => folder.parentId === folderId);
+  };
+
+  const handleFolderClick = (folderId: string) => {
+    setCurrentFolder(folderId);
+    setFolderPath(getFolderPath(folderId));
+  };
+
+  const getListItems = (): ListItem[] => {
+    const currentFolderData = getCurrentFolder();
+    const subfolders = getSubfolders(currentFolder);
+    const folderDocuments = documents.filter(doc => currentFolderData?.documents.includes(doc.id));
+
+    return [
+      ...subfolders.map(folder => ({
+        id: folder.id,
+        name: folder.name,
+        type: 'folder' as const,
+        dateAdded: folder.createdAt,
+        lastModified: folder.updatedAt,
+        parentId: folder.parentId,
+        documents: folder.documents
+      })),
+      ...folderDocuments.map(doc => ({
+        id: doc.id,
+        name: doc.name,
+        type: 'document' as const,
+        category: doc.category,
+        dateAdded: doc.dateAdded,
+        lastModified: doc.lastModified,
+        size: doc.size,
+        tags: doc.tags,
+        status: doc.status
+      }))
+    ];
+  };
+
+  const handleItemClick = (item: ListItem) => {
+    if (item.type === 'folder') {
+      handleFolderClick(item.id);
+    } else {
+      // Handle document click
+      console.log('Document clicked:', item.id);
+    }
+  };
+
+  const filteredItems = getListItems()
+    .filter((item) => {
+      if (item.type === 'document') {
+        return (
+          (selectedCategory === 'all' || item.category === selectedCategory) &&
+          (statusFilter === 'all' || item.status === statusFilter) &&
+          (searchQuery === '' ||
+            item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (item.tags && item.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))))
+        );
+      }
+      return searchQuery === '' || item.name.toLowerCase().includes(searchQuery.toLowerCase());
+    });
 
   const hasActiveFilters = selectedCategory !== 'all' || statusFilter !== 'all';
 
@@ -307,9 +528,79 @@ export function CaseDocuments() {
     console.log('Share document:', documentId);
   };
 
-  const handleDeleteDocument = (documentId: string) => {
-    // TODO: Implement document deletion
-    console.log('Delete document:', documentId);
+  const handleDeleteItem = (item: ListItem) => {
+    if (item.type === 'folder') {
+      // Delete folder and its contents
+      setFolders(prev => prev.filter(f => f.id !== item.id));
+      // Remove folder from parent's documents array
+      setFolders(prev => prev.map(f => ({
+        ...f,
+        documents: f.documents.filter(docId => docId !== item.id)
+      })));
+    } else {
+      // Delete document
+      setDocuments(prev => prev.filter(d => d.id !== item.id));
+      // Remove document from all folders
+      setFolders(prev => prev.map(f => ({
+        ...f,
+        documents: f.documents.filter(docId => docId !== item.id)
+      })));
+    }
+    setDeleteDialogOpen(false);
+    setItemToDelete(null);
+  };
+
+  const handleMoveItem = (item: ListItem, targetFolderId: string) => {
+    if (item.type === 'folder') {
+      // Move folder
+      setFolders(prev => prev.map(f => {
+        if (f.id === item.id) {
+          return { ...f, parentId: targetFolderId };
+        }
+        return f;
+      }));
+    } else {
+      // Move document
+      // Remove from current folder
+      setFolders(prev => prev.map(f => {
+        if (f.id === currentFolder) {
+          return {
+            ...f,
+            documents: f.documents.filter(docId => docId !== item.id)
+          };
+        }
+        return f;
+      }));
+      // Add to target folder
+      setFolders(prev => prev.map(f => {
+        if (f.id === targetFolderId) {
+          return {
+            ...f,
+            documents: [...f.documents, item.id]
+          };
+        }
+        return f;
+      }));
+    }
+    setMoveDialogOpen(false);
+    setItemToMove(null);
+  };
+
+  const handleBulkDelete = () => {
+    const itemsToDelete = filteredItems.filter(item => selectedItems.includes(item.id));
+    itemsToDelete.forEach(item => handleDeleteItem(item));
+    setSelectedItems([]);
+  };
+
+  const handleBulkMove = () => {
+    const itemsToMove = filteredItems.filter(item => selectedItems.includes(item.id));
+    if (itemsToMove.length > 0) {
+      const firstItem = itemsToMove[0];
+      if (firstItem) {
+        setItemToMove(firstItem);
+        setMoveDialogOpen(true);
+      }
+    }
   };
 
   const handleEditDocument = (documentId: string) => {
@@ -325,6 +616,23 @@ export function CaseDocuments() {
   return (
     <TooltipProvider>
       <div className="space-y-6">
+        {/* Folder Navigation */}
+        <div className="flex items-center gap-2 text-sm">
+          {folderPath.map((folder, index) => (
+            <React.Fragment key={folder.id}>
+              <button
+                onClick={() => handleFolderClick(folder.id)}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                {folder.name}
+              </button>
+              {index < folderPath.length - 1 && (
+                <span className="text-muted-foreground">/</span>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Dialog
@@ -462,34 +770,60 @@ export function CaseDocuments() {
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Create New Folder</DialogTitle>
-                  <DialogDescription>Enter a name for the new folder.</DialogDescription>
+                  <DialogDescription>
+                    Enter a name for the new folder in {getCurrentFolder()?.name || 'Case Documents'}.
+                  </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                   <div className="grid gap-2">
-                    <Input id="name" placeholder="Folder name" />
+                    <Input
+                      id="name"
+                      placeholder="Folder name"
+                      value={newFolderName}
+                      onChange={(e) => setNewFolderName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handleCreateFolder();
+                        }
+                      }}
+                    />
                   </div>
                 </div>
                 <DialogFooter>
                   <Button variant="outline" onClick={() => setNewFolderDialogOpen(false)}>
                     Cancel
                   </Button>
-                  <Button type="submit">Create</Button>
+                  <Button 
+                    onClick={handleCreateFolder}
+                    disabled={!newFolderName.trim()}
+                  >
+                    Create
+                  </Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
           </div>
 
-          {selectedDocuments.length > 0 && (
+          {selectedItems.length > 0 && (
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm">
                 <Download className="mr-2 h-4 w-4" />
                 Download
               </Button>
-              <Button variant="outline" size="sm">
-                <Share2 className="mr-2 h-4 w-4" />
-                Share
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleBulkMove}
+              >
+                <FolderPlus className="mr-2 h-4 w-4" />
+                Move
               </Button>
-              <Button variant="outline" size="sm" className="text-red-500 hover:text-red-600">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-red-500 hover:text-red-600"
+                onClick={handleBulkDelete}
+              >
                 <Trash2 className="mr-2 h-4 w-4" />
                 Delete
               </Button>
@@ -632,7 +966,7 @@ export function CaseDocuments() {
           </div>
 
           <div className="text-sm text-muted-foreground">
-            {filteredDocuments.length} {filteredDocuments.length === 1 ? 'document' : 'documents'}
+            {filteredItems.length} {filteredItems.length === 1 ? 'item' : 'items'}
           </div>
         </div>
 
@@ -642,7 +976,7 @@ export function CaseDocuments() {
               <TableRow>
                 <TableHead className="w-12">
                   <Checkbox
-                    checked={selectedDocuments.length === sampleDocuments.length}
+                    checked={selectedItems.length === filteredItems.length}
                     onCheckedChange={handleSelectAll}
                   />
                 </TableHead>
@@ -656,104 +990,225 @@ export function CaseDocuments() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredDocuments.map((doc) => (
-                <TableRow key={doc.id}>
-                  <TableCell>
+              {filteredItems.map((item) => (
+                <TableRow 
+                  key={item.id}
+                  className="cursor-pointer hover:bg-muted/50"
+                  onClick={() => handleItemClick(item)}
+                >
+                  <TableCell onClick={(e) => e.stopPropagation()}>
                     <Checkbox
-                      checked={selectedDocuments.includes(doc.id)}
-                      onCheckedChange={() => handleSelectDocument(doc.id)}
+                      checked={selectedItems.includes(item.id)}
+                      onCheckedChange={() => handleSelectItem(item.id)}
                     />
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <FileText className="h-4 w-4 text-muted-foreground" />
-                      <Link href={`/case/documents/${doc.id}`} className="hover:underline">
-                        {doc.name}
-                      </Link>
+                      {item.type === 'folder' ? (
+                        <FolderPlus className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <FileText className="h-4 w-4 text-muted-foreground" />
+                      )}
+                      <span>{item.name}</span>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div
-                      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${categoryColors[doc.category]}`}
-                    >
-                      {doc.category.charAt(0).toUpperCase() + doc.category.slice(1)}
-                    </div>
+                    {item.type === 'document' && item.category && (
+                      <div
+                        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${categoryColors[item.category]}`}
+                      >
+                        {item.category.charAt(0).toUpperCase() + item.category.slice(1)}
+                      </div>
+                    )}
                   </TableCell>
-                  <TableCell>{doc.dateAdded.toLocaleDateString()}</TableCell>
-                  <TableCell>{doc.lastModified.toLocaleDateString()}</TableCell>
-                  <TableCell>{doc.size}</TableCell>
+                  <TableCell>{item.dateAdded.toLocaleDateString()}</TableCell>
+                  <TableCell>{item.lastModified.toLocaleDateString()}</TableCell>
+                  <TableCell>{item.type === 'document' ? item.size : '-'}</TableCell>
                   <TableCell>
-                    <div
-                      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                      ${
-                        doc.status === 'draft'
-                          ? 'bg-yellow-50 text-yellow-600'
-                          : doc.status === 'final'
-                            ? 'bg-green-50 text-green-600'
-                            : 'bg-gray-50 text-gray-600'
-                      }`}
-                    >
-                      {doc.status.charAt(0).toUpperCase() + doc.status.slice(1)}
-                    </div>
+                    {item.type === 'document' && item.status && (
+                      <div
+                        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
+                        ${
+                          item.status === 'draft'
+                            ? 'bg-yellow-50 text-yellow-600'
+                            : item.status === 'final'
+                              ? 'bg-green-50 text-green-600'
+                              : 'bg-gray-50 text-gray-600'
+                        }`}
+                      >
+                        {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                      </div>
+                    )}
                   </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Link href={`/case/documents/${doc.id}`}>
-                            <Button variant="ghost" size="icon">
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                          </Link>
-                        </TooltipTrigger>
-                        <TooltipContent>View document</TooltipContent>
-                      </Tooltip>
-
-                      <DropdownMenu>
+                  <TableCell onClick={(e) => e.stopPropagation()}>
+                    {item.type === 'document' ? (
+                      <div className="flex items-center gap-2">
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <DropdownMenuTrigger asChild>
+                            <Link href={`/case/documents/${item.id}`}>
                               <Button variant="ghost" size="icon">
-                                <MoreHorizontal className="h-4 w-4" />
+                                <Eye className="h-4 w-4" />
                               </Button>
-                            </DropdownMenuTrigger>
+                            </Link>
                           </TooltipTrigger>
-                          <TooltipContent>More actions</TooltipContent>
+                          <TooltipContent>View document</TooltipContent>
                         </Tooltip>
-                        <DropdownMenuContent align="end" className="w-48">
-                          <DropdownMenuItem onClick={() => handleDownloadDocument(doc.id)}>
-                            <Download className="mr-2 h-4 w-4" />
-                            Download
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleShareDocument(doc.id)}>
-                            <Share2 className="mr-2 h-4 w-4" />
-                            Share
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleEditDocument(doc.id)}>
-                            <Pencil className="mr-2 h-4 w-4" />
-                            Edit Details
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleEditTags(doc.id)}>
-                            <Tags className="mr-2 h-4 w-4" />
-                            Edit Tags
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            onClick={() => handleDeleteDocument(doc.id)}
-                            className="text-red-600 focus:text-red-600 focus:bg-red-50"
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
+
+                        <DropdownMenu>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                            </TooltipTrigger>
+                            <TooltipContent>More actions</TooltipContent>
+                          </Tooltip>
+                          <DropdownMenuContent align="end" className="w-48">
+                            <DropdownMenuItem onClick={() => handleDownloadDocument(item.id)}>
+                              <Download className="mr-2 h-4 w-4" />
+                              Download
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => {
+                              setItemToMove(item);
+                              setMoveDialogOpen(true);
+                            }}>
+                              <FolderPlus className="mr-2 h-4 w-4" />
+                              Move
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleEditDocument(item.id)}>
+                              <Pencil className="mr-2 h-4 w-4" />
+                              Edit Details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleEditTags(item.id)}>
+                              <Tags className="mr-2 h-4 w-4" />
+                              Edit Tags
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setItemToDelete(item);
+                                setDeleteDialogOpen(true);
+                              }}
+                              className="text-red-600 focus:text-red-600 focus:bg-red-50"
+                            >
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <DropdownMenu>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                            </TooltipTrigger>
+                            <TooltipContent>More actions</TooltipContent>
+                          </Tooltip>
+                          <DropdownMenuContent align="end" className="w-48">
+                            <DropdownMenuItem onClick={() => {
+                              setItemToMove(item);
+                              setMoveDialogOpen(true);
+                            }}>
+                              <FolderPlus className="mr-2 h-4 w-4" />
+                              Move
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setItemToDelete(item);
+                                setDeleteDialogOpen(true);
+                              }}
+                              className="text-red-600 focus:text-red-600 focus:bg-red-50"
+                            >
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </div>
+
+        {/* Move Dialog */}
+        <Dialog open={moveDialogOpen} onOpenChange={setMoveDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Move {itemToMove?.type === 'folder' ? 'Folder' : 'Document'}</DialogTitle>
+              <DialogDescription>
+                Select a destination folder for {itemToMove?.name}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Select
+                  onValueChange={(value) => {
+                    if (itemToMove) {
+                      handleMoveItem(itemToMove, value);
+                    }
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select destination folder" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {folders
+                      .filter(f => f.id !== itemToMove?.id && f.id !== currentFolder)
+                      .map(folder => (
+                        <SelectItem key={folder.id} value={folder.id}>
+                          {folder.name}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setMoveDialogOpen(false)}>
+                Cancel
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Delete Dialog */}
+        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Delete {itemToDelete?.type === 'folder' ? 'Folder' : 'Document'}</DialogTitle>
+              <DialogDescription>
+                Are you sure you want to delete {itemToDelete?.name}?
+                {itemToDelete?.type === 'folder' && ' This will also delete all contents of the folder.'}
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button 
+                variant="destructive"
+                onClick={() => {
+                  if (itemToDelete) {
+                    handleDeleteItem(itemToDelete);
+                  }
+                }}
+              >
+                Delete
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </TooltipProvider>
   );
