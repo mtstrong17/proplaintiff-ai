@@ -20,6 +20,13 @@ import {
 } from '@workspace/ui/components/form';
 import { Input } from '@workspace/ui/components/input';
 import { Label } from '@workspace/ui/components/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@workspace/ui/components/select';
 import { Switch } from '@workspace/ui/components/switch';
 import { Textarea } from '@workspace/ui/components/textarea';
 import { useForm } from 'react-hook-form';
@@ -266,6 +273,113 @@ export default function OrganizationsPage() {
             >
               Configure
             </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Audit Log</CardTitle>
+          <CardDescription>View recent security and administrative events in your organization.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between space-x-4">
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="time-range">Time Range</Label>
+              <Select defaultValue="7d">
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select time range" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="24h">Last 24 hours</SelectItem>
+                  <SelectItem value="7d">Last 7 days</SelectItem>
+                  <SelectItem value="30d">Last 30 days</SelectItem>
+                  <SelectItem value="90d">Last 90 days</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                // TODO: Implement export audit log
+                console.log('Export audit log');
+              }}
+            >
+              Export
+            </Button>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              {
+                id: '1',
+                timestamp: '2024-03-20T10:30:00Z',
+                user: 'John Doe',
+                action: 'Changed organization settings',
+                details: 'Updated two-factor authentication requirements',
+                severity: 'info',
+              },
+              {
+                id: '2',
+                timestamp: '2024-03-20T09:15:00Z',
+                user: 'Jane Smith',
+                action: 'Added team member',
+                details: 'Added Bob Wilson as a new team member',
+                severity: 'info',
+              },
+              {
+                id: '3',
+                timestamp: '2024-03-19T16:45:00Z',
+                user: 'John Doe',
+                action: 'Security alert',
+                details: 'Multiple failed login attempts from unknown IP',
+                severity: 'warning',
+              },
+              {
+                id: '4',
+                timestamp: '2024-03-19T14:20:00Z',
+                user: 'System',
+                action: 'Password reset',
+                details: 'Password reset for Jane Smith',
+                severity: 'info',
+              },
+              {
+                id: '5',
+                timestamp: '2024-03-18T11:10:00Z',
+                user: 'John Doe',
+                action: 'Changed organization details',
+                details: 'Updated organization name and address',
+                severity: 'info',
+              },
+            ].map((event) => (
+              <div
+                key={event.id}
+                className="flex items-start space-x-4 rounded-lg border p-4"
+              >
+                <div className="flex-1 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium">{event.action}</p>
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(event.timestamp).toLocaleString()}
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">{event.details}</p>
+                  <p className="text-xs text-muted-foreground">By {event.user}</p>
+                </div>
+                <div className="flex items-center">
+                  <span
+                    className={`rounded-full px-2 py-1 text-xs ${
+                      event.severity === 'warning'
+                        ? 'bg-yellow-100 text-yellow-600'
+                        : 'bg-blue-100 text-blue-600'
+                    }`}
+                  >
+                    {event.severity === 'warning' ? 'Warning' : 'Info'}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>

@@ -27,6 +27,10 @@ const sidebarNavItems = [
     title: 'Security',
     href: '/settings/security',
   },
+  {
+    title: 'Audit Log',
+    href: '/settings/audit-log',
+  },
 ];
 
 interface SettingsLayoutProps {
