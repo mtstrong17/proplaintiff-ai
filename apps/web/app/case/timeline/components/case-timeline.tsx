@@ -3,21 +3,31 @@
 import { Button } from '@workspace/ui/components/button';
 import { Card } from '@workspace/ui/components/card';
 import {
-  AlertCircle,
-  CalendarDays,
-  ChevronDown,
-  ChevronUp,
-  Clock,
-  FileText,
-  Flag,
-  Heart,
-  History,
-  MessageCircle,
-  Scale,
-  Stethoscope,
-  Timer,
+    AlertCircle,
+    CalendarDays,
+    ChevronDown,
+    ChevronUp,
+    Clock,
+    FileText,
+    Flag,
+    Heart,
+    History,
+    MessageCircle,
+    Scale,
+    Stethoscope,
+    Timer,
 } from 'lucide-react';
 import { useState } from 'react';
+
+type Citation = {
+  id: string;
+  text: string;
+  context: string;
+  source: string;
+  addedBy: string;
+  addedAt: Date;
+  type: 'key-fact' | 'evidence' | 'argument' | 'reference';
+};
 
 type TimelineEvent = {
   id: string;
@@ -38,6 +48,7 @@ type TimelineEvent = {
   metadata?: Record<string, any>;
   completed?: boolean;
   documentUrl?: string;
+  citations?: Citation[];
 };
 
 const eventTypeIcons = {
@@ -65,6 +76,13 @@ const priorityColors = {
   high: 'bg-red-500',
 };
 
+const citationTypeColors = {
+  'key-fact': 'bg-blue-50 text-blue-700 border-blue-200',
+  evidence: 'bg-green-50 text-green-700 border-green-200',
+  argument: 'bg-purple-50 text-purple-700 border-purple-200',
+  reference: 'bg-orange-50 text-orange-700 border-orange-200',
+};
+
 // Sample timeline events with past and future events
 const sampleEvents: TimelineEvent[] = [
   {
@@ -80,6 +98,17 @@ const sampleEvents: TimelineEvent[] = [
       type: 'Motor Vehicle Accident',
       policeReport: '#2024-0234',
     },
+    citations: [
+      {
+        id: 'c1',
+        text: 'Vehicle 1 failed to stop at red light, causing collision with Vehicle 2',
+        context: 'Police Report',
+        source: 'Police Report #2024-0234',
+        addedBy: 'John Smith',
+        addedAt: new Date('2024-02-16'),
+        type: 'key-fact',
+      },
+    ],
   },
   {
     id: 'medical-1',
@@ -95,6 +124,17 @@ const sampleEvents: TimelineEvent[] = [
       treatment: 'Pain medication, Neck brace',
     },
     documentUrl: '/documents/er-report.pdf',
+    citations: [
+      {
+        id: 'c2',
+        text: 'Patient presents with severe neck pain and limited range of motion consistent with whiplash injury',
+        context: 'Initial Assessment',
+        source: 'ER Report',
+        addedBy: 'Dr. Sarah Johnson',
+        addedAt: new Date('2024-02-15'),
+        type: 'evidence',
+      },
+    ],
   },
   {
     id: 'medical-2',
@@ -403,6 +443,38 @@ export function CaseTimeline() {
                                 <span className="font-medium">{value}</span>
                               </div>
                             ))}
+                          </div>
+                        )}
+                        {event.citations && event.citations.length > 0 && (
+                          <div className="space-y-3">
+                            <h4 className="text-sm font-medium">Citations</h4>
+                            <div className="space-y-2">
+                              {event.citations.map((citation) => (
+                                <div key={citation.id} className="rounded-lg border p-3 space-y-2">
+                                  <div className="flex items-center gap-2">
+                                    <div
+                                      className={`px-2 py-1 rounded-full text-xs font-medium border ${citationTypeColors[citation.type]}`}
+                                    >
+                                      {citation.type
+                                        .split('-')
+                                        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                                        .join(' ')}
+                                    </div>
+                                    <span className="text-sm text-muted-foreground">
+                                      {citation.source}
+                                    </span>
+                                  </div>
+                                  <blockquote className="text-sm border-l-2 pl-4 italic">
+                                    "{citation.text}"
+                                  </blockquote>
+                                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                                    <span>Added by {citation.addedBy}</span>
+                                    <span>•</span>
+                                    <span>{citation.addedAt.toLocaleDateString()}</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         )}
                         {event.documentUrl && (
