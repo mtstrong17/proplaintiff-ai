@@ -15,8 +15,7 @@ import {
     Clock,
     FileText,
     LucideIcon,
-    Mail,
-    MessageSquare
+    Mail
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -58,12 +57,6 @@ const caseNavigationConfig: NavigationItem[] = [
     name: 'AI Insights',
     href: '/case/insights',
     icon: Brain,
-  },
-  {
-    id: 'case-review',
-    name: 'Case Review',
-    href: '/case/review',
-    icon: MessageSquare,
   },
   {
     id: 'case-demand-letter',
