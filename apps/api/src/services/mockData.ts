@@ -38,7 +38,7 @@ export const SAMPLE_CASES: CaseType[] = [
     nextHearing: '2024-04-20',
     assignedAttorney: 'Sarah Wilson',
     lastActivity: 'Medical records requested',
-    demandLetter: SAMPLE_DEMAND_LETTERS['CASE-001'],
+    demandLetter: SAMPLE_DEMAND_LETTERS['CASE-001'] ?? null,
   },
   {
     id: 'CASE-002',
